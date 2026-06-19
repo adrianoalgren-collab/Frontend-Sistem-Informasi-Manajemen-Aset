@@ -1,0 +1,368 @@
+/* Import font Plus Jakarta Sans dari Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+/* ─────────────────────────────────────────────
+   VARIABEL GLOBAL
+   Ditulis sekali di sini, bisa dipakai di mana
+   saja dengan var(--nama-variabel)
+───────────────────────────────────────────── */
+:root {
+  --brand:          #16a34a;                  /* warna hijau utama */
+  --brand-dark:     #166534;                  /* hijau gelap, untuk gradient */
+  --brand-glow:     rgba(22, 163, 74, 0.18);  /* hijau transparan, untuk background aktif & bayangan */
+  --sidebar-bg:     #0f1a13;                  /* warna background sidebar & topbar */
+  --sidebar-border: rgba(255,255,255,0.06);   /* garis border putih tipis & transparan */
+  --text-muted:     rgba(255,255,255,0.45);   /* teks redup/tidak aktif */
+  --text-main:      rgba(255,255,255,0.88);   /* teks utama */
+  --active-bg:      rgba(22,163,74,0.18);     /* background item navigasi yang aktif */
+  --hover-bg:       rgba(255,255,255,0.06);   /* background saat hover */
+  --transition:     0.22s cubic-bezier(0.4,0,0.2,1); /* durasi & gaya animasi transisi */
+}
+
+/* Set font default seluruh halaman */
+body { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+
+/* ═══════════════════════════════
+   SIDEBAR
+═══════════════════════════════ */
+
+.sidebar-shell {
+  position: fixed;       /* menempel di layar, tidak ikut scroll */
+  top: 0; left: 0;       /* posisi pojok kiri atas */
+  width: 220px;          /* lebar default saat tidak collapsed */
+  height: 100vh;         /* tinggi penuh layar */
+  background: var(--sidebar-bg);                    /* warna background gelap */
+  border-right: 1px solid var(--sidebar-border);    /* garis kanan tipis */
+  display: flex;         /* susun anak elemen secara flex */
+  flex-direction: column; /* susun ke bawah (logo → nav → footer) */
+  z-index: 800;          /* tampil di atas elemen lain */
+  overflow: hidden;      /* sembunyikan konten yang melebihi lebar */
+  transition: width var(--transition); /* animasi saat lebar berubah */
+}
+
+/* Saat class "collapsed" ditambahkan, perkecil lebar sidebar */
+.sidebar-shell.collapsed { width: 72px; }
+
+
+/* ── AREA LOGO ── */
+
+.sidebar-logo {
+  display: flex;          /* susun ikon, teks, tombol secara horizontal */
+  align-items: center;    /* rata tengah secara vertikal */
+  gap: 12px;              /* jarak antar elemen di dalam logo */
+  padding: 18px 20px;     /* jarak dalam: atas-bawah 18px, kiri-kanan 20px */
+  min-height: 72px;       /* tinggi minimum area logo */
+  border-bottom: 1px solid var(--sidebar-border); /* garis bawah pemisah */
+  white-space: nowrap;    /* cegah teks pindah baris */
+  overflow: hidden;       /* sembunyikan teks yang meluber saat collapsed */
+  flex-shrink: 0;         /* jangan mengecil meski konten nav penuh */
+}
+
+/* Saat collapsed, kurangi padding karena ruang lebih sempit */
+.sidebar-shell.collapsed .sidebar-logo { padding: 18px; }
+
+.logo-ring {
+  width: 38px; height: 38px;  /* ukuran kotak ikon logo */
+  border-radius: 12px;         /* sudut membulat */
+  background: linear-gradient(135deg, var(--brand), #22c55e); /* gradient hijau diagonal */
+  display: flex; align-items: center; justify-content: center; /* tengahkan ikon di dalamnya */
+  flex-shrink: 0;              /* jangan mengecil */
+  box-shadow: 0 0 16px var(--brand-glow); /* cahaya hijau di sekeliling kotak */
+}
+
+.logo-ring img {
+  width: 26px; height: 26px;  /* ukuran gambar logo */
+  object-fit: contain;         /* jaga proporsi gambar */
+  filter: brightness(0) invert(1); /* ubah warna gambar menjadi putih */
+}
+
+/* Wadah teks nama perusahaan & subtitle */
+.logo-text { display: flex; flex-direction: column; }
+
+/* Baris pertama: nama perusahaan */
+.logo-text span:first-child {
+  font-size: 13px; font-weight: 700;  /* ukuran & ketebalan font */
+  color: var(--text-main);             /* warna putih terang */
+  letter-spacing: 0.01em;             /* sedikit jarak antar huruf */
+  line-height: 1.2;                   /* jarak antar baris */
+}
+
+/* Baris kedua: subtitle aplikasi */
+.logo-text span:last-child {
+  font-size: 10px; font-weight: 600;  /* lebih kecil dari nama perusahaan */
+  color: var(--brand);                 /* warna hijau brand */
+  letter-spacing: 0.06em;             /* jarak huruf lebih lebar (style label) */
+  text-transform: uppercase;          /* huruf kapital semua */
+  margin-top: 2px;                    /* sedikit jarak dari baris di atasnya */
+}
+
+/* Sembunyikan semua teks saat sidebar collapsed — cukup 1 blok untuk 4 elemen */
+.sidebar-shell.collapsed .logo-text,
+.sidebar-shell.collapsed .nav-label,
+.sidebar-shell.collapsed .nav-section-label,
+.sidebar-shell.collapsed .logout-label {
+  opacity: 0;             /* buat transparan (tapi ruang tetap ada) */
+  pointer-events: none;   /* nonaktifkan klik saat tidak terlihat */
+  transition: opacity var(--transition); /* animasi saat menghilang/muncul */
+}
+
+
+/* ── AREA NAVIGASI ── */
+
+.sidebar-nav {
+  flex: 1;                 /* ambil sisa ruang di antara logo dan footer */
+  padding: 14px 10px;      /* jarak dalam */
+  display: flex; flex-direction: column; /* item nav tersusun ke bawah */
+  gap: 2px;                /* jarak kecil antar item */
+  overflow-y: auto;        /* scroll jika item terlalu banyak */
+  overflow-x: hidden;      /* jangan scroll horizontal */
+  scrollbar-width: none;   /* sembunyikan scrollbar di Firefox */
+}
+/* Sembunyikan scrollbar di Chrome/Safari */
+.sidebar-nav::-webkit-scrollbar { display: none; }
+
+/* Label section kecil (MAIN MENU, DATA ASET, dst) */
+.nav-section-label {
+  padding: 10px 10px 4px;    /* padding lebih besar di atas dari bawah */
+  font-size: 9.5px; font-weight: 700; /* kecil & tebal */
+  letter-spacing: 0.1em;     /* jarak huruf lebar untuk efek label */
+  text-transform: uppercase;  /* huruf kapital */
+  color: var(--text-muted);   /* warna redup */
+  white-space: nowrap;        /* jangan pindah baris */
+}
+
+/* Item navigasi (bisa berupa <NavLink> atau <button>) */
+.nav-link-item {
+  display: flex; align-items: center; /* ikon dan label sejajar horizontal */
+  gap: 11px; padding: 10px;           /* jarak ikon-label & padding dalam */
+  border-radius: 10px;                /* sudut membulat */
+  color: var(--text-muted);           /* warna teks default: redup */
+  font-size: 13.5px; font-weight: 500; /* ukuran & ketebalan font */
+  white-space: nowrap;                /* jangan pindah baris */
+  position: relative;                 /* diperlukan untuk ::before (pill) dan ::after (tooltip) */
+  text-decoration: none !important;   /* hapus underline dari <a> */
+  background: transparent; border: none; /* reset style default button/link */
+  width: 100%; text-align: left; cursor: pointer; /* penuh, rata kiri, pointer */
+  transition: background var(--transition), color var(--transition); /* animasi hover */
+}
+
+/* Saat di-hover: background sedikit terang, teks lebih putih */
+.nav-link-item:hover { background: var(--hover-bg); color: var(--text-main); }
+
+/* Saat aktif (halaman saat ini): background hijau transparan, teks hijau */
+.nav-link-item.active { background: var(--active-bg); color: #4ade80; }
+
+/* Ikon item aktif: warna hijau + efek cahaya */
+.nav-link-item.active .nav-icon {
+  color: var(--brand);
+  filter: drop-shadow(0 0 6px var(--brand-glow)); /* efek glow pada ikon */
+}
+
+/* Garis kecil hijau di sisi kiri item yang aktif */
+.nav-link-item.active::before {
+  content: '';               /* wajib ada agar pseudo-element muncul */
+  position: absolute;        /* posisi relatif terhadap .nav-link-item */
+  left: 0; top: 50%;         /* menempel di sisi kiri, tengah vertikal */
+  transform: translateY(-50%); /* geser ke atas 50% tingginya sendiri agar benar-benar tengah */
+  width: 3px; height: 60%;   /* lebar tipis, tinggi 60% item */
+  border-radius: 0 3px 3px 0; /* sudut membulat hanya di sisi kanan */
+  background: var(--brand);  /* warna hijau */
+}
+
+/* Wadah ikon Font Awesome */
+.nav-icon {
+  width: 18px; height: 18px; font-size: 14px; /* ukuran area & ikon */
+  display: flex; align-items: center; justify-content: center; /* tengahkan ikon */
+  flex-shrink: 0;             /* jangan mengecil saat label tersembunyi */
+  transition: color var(--transition); /* animasi perubahan warna */
+}
+
+/* Teks label navigasi */
+.nav-label {
+  white-space: nowrap;  /* jangan pindah baris */
+  overflow: hidden;     /* potong teks yang melebihi lebar */
+}
+
+/* Tooltip: muncul di kanan ikon saat sidebar collapsed & item di-hover */
+.sidebar-shell.collapsed .nav-link-item[data-tooltip]:hover::after {
+  content: attr(data-tooltip); /* ambil teks dari atribut data-tooltip di HTML */
+  position: absolute;           /* posisi relatif terhadap .nav-link-item */
+  left: calc(100% + 12px);      /* 12px di kanan item */
+  top: 50%; transform: translateY(-50%); /* tengah vertikal */
+  padding: 5px 10px; border-radius: 7px; /* padding & sudut membulat */
+  background: #1e2d22; color: var(--text-main); /* background gelap, teks terang */
+  font-size: 12px; font-weight: 500;             /* ukuran font tooltip */
+  border: 1px solid var(--sidebar-border);       /* border tipis */
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);        /* bayangan di bawah tooltip */
+  white-space: nowrap; pointer-events: none;     /* jangan pindah baris, jangan bisa diklik */
+  z-index: 9999; /* tampil paling depan, di atas semua elemen */
+}
+
+/* Garis horizontal pemisah antar section navigasi */
+.nav-divider { height: 1px; background: var(--sidebar-border); margin: 6px 0; }
+
+
+/* ── FOOTER SIDEBAR: LOGOUT ── */
+
+.sidebar-footer {
+  padding: 10px 10px 16px;  /* padding lebih besar di bawah */
+  border-top: 1px solid var(--sidebar-border); /* garis atas pemisah */
+  flex-shrink: 0;            /* jangan mengecil */
+}
+
+.logout-btn {
+  display: flex; align-items: center; /* ikon & teks sejajar */
+  gap: 11px; padding: 10px;           /* jarak & padding dalam */
+  border-radius: 10px;                /* sudut membulat */
+  color: #f87171;                     /* warna merah muda */
+  font-size: 13.5px; font-weight: 500; /* ukuran & ketebalan */
+  background: transparent; border: none; /* reset style default */
+  width: 100%; white-space: nowrap; cursor: pointer; /* penuh lebar, pointer */
+  transition: background var(--transition); /* animasi hover */
+}
+/* Saat hover: background merah transparan */
+.logout-btn:hover { background: rgba(248,113,113,0.1); }
+
+
+/* ── TOMBOL COLLAPSE/EXPAND ── */
+
+.collapse-btn {
+  width: 26px; height: 26px;   /* ukuran tombol kecil */
+  display: flex; align-items: center; justify-content: center; /* tengahkan ikon */
+  border-radius: 7px;           /* sudut membulat */
+  background: rgba(255,255,255,0.07); /* background putih sangat transparan */
+  border: 1px solid var(--sidebar-border); /* border tipis */
+  color: var(--text-muted); cursor: pointer; /* warna redup & pointer */
+  margin-left: auto;            /* dorong tombol ke paling kanan */
+  flex-shrink: 0;               /* jangan mengecil */
+  transition: background var(--transition), color var(--transition);
+}
+/* Saat hover: sedikit lebih terang */
+.collapse-btn:hover { background: rgba(255,255,255,0.12); color: var(--text-main); }
+
+
+/* ── SUBMENU ──
+   Daftar item yang muncul di bawah nav-link-item
+   yang memiliki anak (submenu) */
+
+/* Wrapper submenu — tersembunyi secara default */
+/* ── SUBMENU ──
+   Daftar item yang muncul di bawah nav-link-item
+   yang memiliki anak (submenu) */
+
+.submenu {
+  overflow: hidden;               /* sembunyikan item yang meluber saat tertutup */
+  max-height: 0;                  /* tinggi 0 = submenu tertutup sepenuhnya */
+  transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1); /* animasi buka/tutup halus */
+}
+
+/* Class "open" ditambahkan via React state saat parent diklik */
+.submenu.open {
+  max-height: 200px;              /* buka submenu dengan tinggi maksimal yang cukup */
+}
+
+.submenu-item {
+  display: flex;                  /* ikon dan label sejajar horizontal */
+  align-items: center;            /* rata tengah vertikal */
+  gap: 8px;                       /* jarak antara ikon dan teks label */
+  padding: 8px 12px 8px 28px;    /* padding kiri lebih besar sebagai indent dari parent */
+  font-size: 12.5px;              /* sedikit lebih kecil dari item utama */
+  font-weight: 400;               /* tidak tebal, beda dari item parent */
+  color: var(--text-muted);       /* warna redup, lebih kalem dari item utama */
+  text-decoration: none;          /* hapus underline bawaan <a> */
+  border-radius: 8px;             /* sudut membulat */
+  margin: 1px 8px;                /* jarak antar item dan dari tepi sidebar */
+  white-space: nowrap;            /* jangan pindah baris */
+  transition: background var(--transition), color var(--transition); /* animasi hover */
+}
+
+.submenu-item i {
+  font-size: 11px;                /* ikon lebih kecil dari ikon parent */
+  width: 14px;                    /* lebar tetap agar label selalu sejajar */
+  text-align: center;             /* tengahkan ikon dalam kotaknya */
+  flex-shrink: 0;                 /* jangan mengecil walau ruang sempit */
+}
+
+.submenu-item:hover {
+  background: var(--hover-bg);    /* background putih transparan saat hover */
+  color: var(--text-main);        /* teks lebih terang saat hover */
+}
+
+.submenu-item.active {
+  background: var(--active-bg);   /* background hijau transparan saat aktif */
+  color: var(--brand);            /* teks hijau brand saat aktif */
+  font-weight: 600;               /* tebal saat aktif untuk membedakan dari yang lain */
+}
+
+.nav-chevron {
+  margin-left: auto;              /* dorong chevron ke ujung kanan item */
+  font-size: 10px;                /* ukuran ikon panah kecil */
+  color: var(--text-muted);       /* warna redup sama seperti teks muted */
+  transition: transform 0.25s ease; /* animasi putar saat submenu dibuka */
+  flex-shrink: 0;                 /* jangan mengecil walau ruang sempit */
+}
+
+/* Class "open" ditambahkan via React state bersamaan dengan .submenu.open */
+.nav-chevron.open {
+  transform: rotate(180deg);      /* putar 180° saat submenu terbuka */
+}
+
+/* Saat sidebar collapsed, submenu tidak bisa tampil karena tidak ada ruang */
+.sidebar-shell.collapsed .submenu {
+  display: none;                  /* sembunyikan seluruh submenu */
+}
+
+/* Chevron juga disembunyikan saat collapsed karena tidak ada label yang tampil */
+.sidebar-shell.collapsed .nav-chevron {
+  display: none;
+}
+
+
+/* ═══════════════════════════════
+   TOPBAR
+═══════════════════════════════ */
+
+.topbar-shell {
+  position: fixed;  /* menempel di layar */
+  top: 0; right: 0; /* pojok kanan atas */
+  height: 60px;     /* tinggi topbar */
+  background: var(--sidebar-bg);                   /* warna sama dengan sidebar */
+  border-bottom: 1px solid var(--sidebar-border);  /* garis bawah pemisah */
+  display: flex; align-items: center; justify-content: space-between; /* kiri & kanan */
+  padding: 0 24px;  /* jarak kiri-kanan */
+  z-index: 700;     /* di bawah sidebar (800) tapi di atas konten */
+  transition: left var(--transition); /* animasi saat left berubah mengikuti sidebar */
+}
+
+/* Judul aplikasi di sebelah kiri topbar */
+.topbar-title {
+  display: flex; align-items: center; gap: 10px; /* sejajar dengan badge */
+  font-size: 13.5px; font-weight: 600;            /* ukuran & ketebalan */
+  color: var(--text-main); letter-spacing: 0.01em; /* warna & spasi huruf */
+}
+
+/* Badge "SIMA" di samping judul */
+.topbar-badge {
+  padding: 2px 8px; border-radius: 20px;  /* kapsul membulat */
+  font-size: 10px; font-weight: 700;       /* kecil & tebal */
+  letter-spacing: 0.08em; text-transform: uppercase; /* kapital & spasi lebar */
+  color: var(--brand);                     /* teks hijau */
+  background: var(--brand-glow);           /* background hijau transparan */
+  border: 1px solid rgba(22,163,74,0.3);  /* border hijau tipis */
+}
+
+/* Grup kanan topbar (tanggal + avatar) */
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+
+/* Teks tanggal */
+.topbar-time { font-size: 12px; font-weight: 500; color: var(--text-muted); }
+
+/* Avatar inisial user */
+.topbar-avatar {
+  width: 34px; height: 34px; border-radius: 10px; /* ukuran & sudut membulat */
+  background: linear-gradient(135deg, var(--brand-dark), var(--brand)); /* gradient hijau */
+  display: flex; align-items: center; justify-content: center; /* tengahkan inisial */
+  font-size: 12px; font-weight: 700; /* ukuran & ketebalan inisial */
+  color: white; letter-spacing: 0.04em; /* warna putih & sedikit spasi */
+}

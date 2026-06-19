@@ -1,0 +1,238 @@
+/* ─────────────────────────────────────────────────────────────────
+   IndexRequestPerbaikanStaff.css
+   Style khusus untuk halaman portal pengajuan staff.
+   Dipakai di IndexRequestPerbaikanStaff dan IndexReportStaff.
+───────────────────────────────────────────────────────────────── */
+
+
+/* ══════════════════════════════════════════════════════════════════
+   1. SUMMARY CARDS
+   3 kartu ringkasan di atas halaman — Pending, Diterima, Ditolak
+══════════════════════════════════════════════════════════════════ */
+
+/* grid 3 kolom untuk kartu ringkasan */
+.staff-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);       /* 3 kolom sama lebar */
+  gap: 14px;                                   /* jarak antar card */
+  margin-bottom: 20px;                         /* jarak ke konten berikutnya */
+}
+
+/* satu kartu ringkasan */
+.staff-summary-card {
+  background: #fff;                            /* background putih */
+  border-radius: 12px;                         /* sudut membulat */
+  padding: 18px 20px;                          /* jarak dalam card */
+  border: 1px solid #f0f0f0;                   /* border sangat tipis */
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);  /* bayangan halus */
+  display: flex;                               /* ikon dan teks sejajar */
+  align-items: center;
+  gap: 14px;                                   /* jarak antara ikon dan teks */
+}
+
+/* kotak ikon di dalam kartu */
+.staff-summary-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;                         /* sudut membulat */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;                              /* tidak menyusut saat ruang sempit */
+  font-size: 18px;                             /* ukuran ikon */
+}
+
+/* warna ikon per status */
+.staff-summary-icon.pending  { background: rgba(234, 179, 8,  0.1); color: #ca8a04; } /* kuning */
+.staff-summary-icon.diterima { background: rgba(22,  163, 74, 0.1); color: #16a34a; } /* hijau */
+.staff-summary-icon.ditolak  { background: rgba(239, 68,  68, 0.1); color: #ef4444; } /* merah */
+
+/* label kecil di atas angka */
+.staff-summary-label {
+  color: #6b7280;                              /* abu medium */
+  font-size: 12px;
+  margin: 0;
+}
+
+/* angka besar di bawah label */
+.staff-summary-value {
+  color: #111827;                              /* hitam gelap */
+  font-size: 24px;                             /* besar agar mudah terbaca */
+  font-weight: 700;                            /* tebal */
+  margin: 0;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   2. CARD BUAT REQUEST BARU
+   Baris dengan judul di kiri dan tombol di kanan
+══════════════════════════════════════════════════════════════════ */
+
+/* modifier jarak bawah untuk content-card */
+.content-card.mb-16 {
+  margin-bottom: 16px;                         /* jarak ke card berikutnya */
+}
+
+/* layout card — judul kiri, tombol kanan */
+.request-action-card {
+  display: flex;
+  justify-content: space-between;              /* judul di kiri, tombol di kanan */
+  align-items: center;
+}
+
+.request-action-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: #111827;                              /* hitam gelap */
+  margin: 0;
+}
+
+.request-action-title i {
+  color: var(--brand);                         /* ikon hijau brand */
+}
+
+.request-action-subtitle {
+  color: #9ca3af;                              /* abu redup untuk keterangan tambahan */
+  font-size: 12px;
+  margin: 4px 0 0 0;                           /* jarak dari judul */
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   3. DAFTAR RIWAYAT REQUEST
+   List baris-baris riwayat pengajuan
+══════════════════════════════════════════════════════════════════ */
+
+/* judul section seperti "Riwayat Pengajuan Saya" */
+.section-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: #111827;                              /* hitam gelap */
+  margin-bottom: 16px;                         /* jarak ke konten di bawahnya */
+}
+
+.section-title i {
+  color: #6b7280;                              /* ikon abu */
+}
+
+/* wrapper list — susun item ke bawah */
+.request-list {
+  display: flex;
+  flex-direction: column;                      /* susun vertikal */
+  gap: 10px;                                   /* jarak antar item */
+}
+
+/* satu baris riwayat */
+.request-item {
+  background: #fafafa;                         /* background abu sangat terang */
+  border: 1px solid #f0f0f0;                   /* border tipis */
+  border-radius: 10px;                         /* sudut membulat */
+  padding: 16px 18px;                          /* jarak dalam */
+  display: flex;                               /* ikon, info, badge, tombol sejajar */
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;                                   /* jarak antar bagian */
+}
+
+/* kotak ikon status di setiap baris */
+.request-item-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  flex-shrink: 0;                              /* tidak menyusut */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;                             /* ukuran ikon */
+}
+
+/* warna ikon per status */
+.request-item-icon.pending  { background: rgba(234, 179, 8,  0.1); color: #ca8a04; } /* kuning */
+.request-item-icon.diterima { background: rgba(22,  163, 74, 0.1); color: #16a34a; } /* hijau */
+.request-item-icon.ditolak  { background: rgba(239, 68,  68, 0.1); color: #ef4444; } /* merah */
+
+/* area info — mengisi sisa ruang */
+.request-item-info {
+  flex: 1;                                     /* isi ruang yang tersisa */
+}
+
+/* nama aset / judul request */
+.request-item-title {
+  font-weight: 600;
+  color: #111827;                              /* hitam gelap */
+  margin: 0;
+  font-size: 14px;
+}
+
+/* info lokasi dan tanggal */
+.request-item-meta {
+  color: #9ca3af;                              /* abu redup untuk info sekunder */
+  font-size: 12px;
+  margin: 2px 0 0 0;                           /* jarak kecil dari judul */
+}
+
+/* tombol lihat file dan hapus */
+.request-item-actions {
+  display: flex;
+  gap: 8px;                                    /* jarak antar tombol */
+  flex-shrink: 0;                              /* tidak menyusut */
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   4. EMPTY STATE & LOADING
+   Tampilan saat data kosong atau sedang dimuat
+══════════════════════════════════════════════════════════════════ */
+
+/* kotak kosong saat belum ada request */
+.staff-empty-state {
+  text-align: center;
+  padding: 50px 20px;                          /* jarak besar agar terlihat lapang */
+  background: #fafafa;                         /* background abu sangat terang */
+  border-radius: 10px;
+  border: 1px dashed #e5e7eb;                  /* border putus-putus */
+}
+
+.staff-empty-state i {
+  color: #d1d5db;                              /* ikon abu redup */
+  margin-bottom: 12px;
+  display: block;                              /* ikon tampil di baris sendiri */
+}
+
+.staff-empty-state p {
+  color: #6b7280;                              /* teks abu medium */
+  font-weight: 600;
+  margin: 0;
+}
+
+.staff-empty-state small {
+  color: #9ca3af;                              /* teks kecil lebih redup */
+  font-size: 13px;
+}
+
+/* spinner loading */
+.loading-state {
+  text-align: center;
+  padding: 40px 0;                             /* jarak atas bawah */
+  color: #9ca3af;                              /* abu redup */
+}
+
+.loading-state p {
+  margin-top: 10px;                            /* jarak teks dari spinner */
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   5. UTILITAS
+   Class kecil yang dipakai di beberapa tempat
+══════════════════════════════════════════════════════════════════ */
+
+/* link tombol lihat file tanpa garis bawah */
+.btn-action.btn-edit.no-underline {
+  text-decoration: none;                       /* hapus underline default link */
+}
+
+/* ikon merah untuk peringatan di modal */
+.icon-danger {
+  color: #ef4444;                              /* merah */
+}

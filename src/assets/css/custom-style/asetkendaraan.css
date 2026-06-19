@@ -1,0 +1,229 @@
+/* ─────────────────────────────────────────────────────────────────
+   IndexAsetKendaraanStaff.css
+   Style dashboard untuk halaman kendaraan staff.
+   Dipakai di IndexAsetKendaraanStaff.jsx.
+───────────────────────────────────────────────────────────────── */
+
+
+/* ══════════════════════════════════════════════════════════════════
+   1. HERO BANNER
+   Banner besar di atas halaman — gradient hijau dengan nama kendaraan,
+   plat nomor, dan tombol Selesai Tugas di kanan
+══════════════════════════════════════════════════════════════════ */
+
+.kendaraan-hero {
+  background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand) 100%); /* gradient dari hijau gelap ke hijau terang, arah diagonal */
+  border-radius: 16px;                         /* sudut membulat */
+  padding: 40px 36px;                          /* jarak dalam banner — atas-bawah 40px, kiri-kanan 36px */
+  display: flex;                               /* susun kiri dan kanan secara horizontal */
+  align-items: center;                         /* rata tengah vertikal */
+  justify-content: space-between;              /* kiri dan kanan berjauhan */
+  gap: 24px;                                   /* jarak minimum antara kiri dan kanan */
+  margin-bottom: 20px;                         /* jarak ke card info di bawahnya */
+  position: relative;                          /* agar dekorasi ::before dan ::after bisa diposisikan di dalam */
+  overflow: hidden;                            /* sembunyikan bagian dekorasi yang keluar dari banner */
+}
+
+/* dekorasi lingkaran kecil di pojok kanan atas banner */
+.kendaraan-hero::before {
+  content: "";                                 /* wajib ada agar elemen pseudo muncul */
+  position: absolute;                          /* menempel di posisi tertentu dalam banner */
+  top: -40px;                                  /* sengaja sedikit keluar dari atas */
+  right: -40px;                                /* sengaja sedikit keluar dari kanan */
+  width: 180px;                                /* lebar lingkaran */
+  height: 180px;                               /* tinggi lingkaran — sama dengan lebar agar bulat */
+  border-radius: 50%;                          /* jadikan bentuk lingkaran sempurna */
+  background: rgba(255, 255, 255, 0.07);       /* putih sangat transparan — efek dekorasi halus */
+}
+
+/* dekorasi lingkaran besar di pojok kanan bawah banner */
+.kendaraan-hero::after {
+  content: "";                                 /* wajib ada agar elemen pseudo muncul */
+  position: absolute;                          /* menempel di posisi tertentu dalam banner */
+  bottom: -60px;                               /* sengaja sedikit keluar dari bawah */
+  right: 80px;                                 /* jarak dari tepi kanan */
+  width: 240px;                                /* lebar lingkaran — lebih besar dari ::before */
+  height: 240px;                               /* tinggi lingkaran — sama dengan lebar agar bulat */
+  border-radius: 50%;                          /* jadikan bentuk lingkaran sempurna */
+  background: rgba(255, 255, 255, 0.04);       /* putih sangat transparan — lebih redup dari ::before */
+}
+
+/* bagian kiri banner — ikon mobil dan teks nama + plat */
+.kendaraan-hero-left {
+  display: flex;                               /* ikon dan teks sejajar horizontal */
+  align-items: center;                         /* rata tengah vertikal */
+  gap: 20px;                                   /* jarak antara ikon dan teks */
+  z-index: 1;                                  /* di atas dekorasi lingkaran yang ada di belakang */
+}
+
+/* kotak ikon mobil */
+.kendaraan-hero-icon {
+  width: 90px;                                 /* lebar kotak ikon */
+  height: 90px;                                /* tinggi kotak ikon — sama agar kotak persegi */
+  border-radius: 20px;                         /* sudut membulat */
+  background: rgba(255, 255, 255, 0.18);       /* putih transparan sebagai background ikon */
+  display: flex;                               /* pusatkan ikon di dalam kotak */
+  align-items: center;                         /* rata tengah vertikal */
+  justify-content: center;                     /* rata tengah horizontal */
+  font-size: 40px;                             /* ukuran ikon mobil */
+  color: #fff;                                 /* warna ikon putih */
+  flex-shrink: 0;                              /* tidak menyusut saat ruang sempit */
+}
+
+/* nama kendaraan — tulisan besar di atas plat */
+.kendaraan-hero-name {
+  font-size: 32px;                             /* besar agar mudah terbaca */
+  font-weight: 800;                            /* sangat tebal */
+  color: #fff;                                 /* teks putih */
+  margin: 0;                                   /* hapus margin default */
+}
+
+/* plat nomor di bawah nama kendaraan */
+.kendaraan-hero-plat {
+  font-size: 18px;                             /* lebih kecil dari nama */
+  color: rgba(255, 255, 255, 0.75);            /* putih sedikit transparan agar tidak terlalu mencolok */
+  margin: 6px 0 0 0;                           /* jarak kecil dari nama di atasnya */
+  font-weight: 600;                            /* semi-bold */
+  letter-spacing: 0.1em;                       /* spasi antar huruf agar terlihat seperti format plat */
+}
+
+/* bagian kanan banner — tombol selesai tugas */
+.kendaraan-hero-right {
+  z-index: 1;                                  /* di atas dekorasi lingkaran */
+}
+
+/* tombol Selesai Tugas */
+.btn-selesai {
+  padding: 14px 28px;                          /* jarak dalam tombol — atas-bawah 14px, kiri-kanan 28px */
+  border-radius: 10px;                         /* sudut membulat */
+  background: rgba(255, 255, 255, 0.15);       /* putih transparan sebagai background */
+  border: 1.5px solid rgba(255, 255, 255, 0.4); /* border putih tipis */
+  color: #fff;                                 /* teks putih */
+  font-size: 15px;                             /* ukuran teks */
+  font-weight: 700;                            /* tebal */
+  font-family: inherit;                        /* ikut font halaman */
+  cursor: pointer;                             /* tanda bisa diklik */
+  transition: background 0.15s, border-color 0.15s; /* animasi perubahan warna saat hover */
+  white-space: nowrap;                         /* teks tidak pindah baris walau ruang sempit */
+}
+
+.btn-selesai:hover {
+  background: rgba(255, 255, 255, 0.25);       /* lebih terang saat hover */
+  border-color: rgba(255, 255, 255, 0.6);      /* border lebih terlihat saat hover */
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   2. GRID INFO CARDS
+   4 kartu informasi kendaraan — Kode, Manufacturer, Kondisi, Driver
+══════════════════════════════════════════════════════════════════ */
+
+/* grid 4 kolom untuk kartu info */
+.kendaraan-info-grid {
+  display: grid;                               /* aktifkan grid */
+  grid-template-columns: repeat(4, 1fr);       /* 4 kolom sama lebar */
+  gap: 14px;                                   /* jarak antar card */
+  margin-bottom: 20px;                         /* jarak ke konten berikutnya */
+}
+
+/* satu kartu info */
+.kendaraan-info-card {
+  background: #fff;                            /* background putih */
+  border: 1px solid #f0f0f0;                   /* border sangat tipis */
+  border-radius: 12px;                         /* sudut membulat */
+  padding: 24px;                               /* jarak dalam card */
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);  /* bayangan halus di bawah card */
+}
+
+/* kotak ikon di dalam card */
+.kendaraan-info-icon {
+  width: 48px;                                 /* lebar kotak ikon */
+  height: 48px;                                /* tinggi kotak ikon */
+  border-radius: 12px;                         /* sudut membulat */
+  background: rgba(var(--brand-rgb), 0.1);     /* hijau sangat transparan */
+  display: flex;                               /* pusatkan ikon */
+  align-items: center;                         /* rata tengah vertikal */
+  justify-content: center;                     /* rata tengah horizontal */
+  font-size: 20px;                             /* ukuran ikon */
+  color: var(--brand);                         /* warna hijau brand */
+  margin-bottom: 14px;                         /* jarak ke label di bawahnya */
+}
+
+/* label kecil di atas nilai — seperti "KODE KENDARAAN" */
+.kendaraan-info-label {
+  font-size: 13px;                             /* kecil agar terlihat sebagai label */
+  color: #9ca3af;                              /* abu redup */
+  font-weight: 600;                            /* semi-bold */
+  text-transform: uppercase;                   /* huruf kapital semua */
+  letter-spacing: 0.06em;                      /* sedikit spasi huruf agar terlihat seperti label */
+  margin: 0 0 6px 0;                           /* jarak ke nilai di bawahnya */
+}
+
+/* nilai utama yang ditampilkan di dalam card */
+.kendaraan-info-value {
+  font-size: 20px;                             /* cukup besar agar mudah dibaca */
+  font-weight: 700;                            /* tebal */
+  color: #111827;                              /* hitam gelap */
+  margin: 0;                                   /* hapus margin default */
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   3. BADGE KONDISI KENDARAAN
+   Label berwarna untuk menunjukkan kondisi kendaraan
+══════════════════════════════════════════════════════════════════ */
+
+/* base badge — style dasar yang dipakai semua kondisi */
+.kondisi-badge {
+  display: inline-block;                       /* agar padding atas-bawah berlaku */
+  padding: 3px 12px;                           /* jarak dalam badge — kecil seperti kapsul */
+  border-radius: 20px;                         /* membulat penuh */
+  font-size: 12px;                             /* kecil agar tidak mendominasi */
+  font-weight: 700;                            /* tebal agar terbaca meski kecil */
+}
+
+/* kondisi baik — warna hijau */
+.kondisi-badge.baik {
+  background: rgba(22, 163, 74, 0.12);         /* hijau transparan */
+  color: #16a34a;                              /* teks hijau */
+  border: 1px solid rgba(22, 163, 74, 0.25);   /* border hijau tipis */
+}
+
+/* kondisi rusak — warna merah */
+.kondisi-badge.rusak {
+  background: rgba(239, 68, 68, 0.12);         /* merah transparan */
+  color: #ef4444;                              /* teks merah */
+  border: 1px solid rgba(239, 68, 68, 0.25);   /* border merah tipis */
+}
+
+/* kondisi servis — warna kuning */
+.kondisi-badge.servis {
+  background: rgba(234, 179, 8, 0.12);         /* kuning transparan */
+  color: #ca8a04;                              /* teks kuning gelap agar terbaca */
+  border: 1px solid rgba(234, 179, 8, 0.25);   /* border kuning tipis */
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   4. RESPONSIVE
+   Penyesuaian tampilan di layar yang lebih kecil
+══════════════════════════════════════════════════════════════════ */
+
+/* di tablet — grid berubah jadi 2 kolom */
+@media (max-width: 900px) {
+  .kendaraan-info-grid {
+    grid-template-columns: repeat(2, 1fr);     /* 2 kolom sama lebar */
+  }
+}
+
+/* di HP — banner susun ke bawah, grid jadi 1 kolom */
+@media (max-width: 600px) {
+  .kendaraan-hero {
+    flex-direction: column;                    /* ikon+nama dan tombol susun ke bawah */
+    align-items: flex-start;                   /* rata kiri */
+  }
+
+  .kendaraan-info-grid {
+    grid-template-columns: 1fr;               /* 1 kolom penuh */
+  }
+}

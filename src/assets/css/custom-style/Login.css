@@ -1,0 +1,285 @@
+/* ─────────────────────────────────────────────────────────────────
+   Login.css
+   Style khusus untuk halaman login.
+   Termasuk layout, form, toggle password, tombol, gambar, dan modal sukses.
+───────────────────────────────────────────────────────────────── */
+
+
+/* ══════════════════════════════════════════════════════════════════
+   1. HALAMAN LOGIN
+   Background dan posisi konten di tengah layar
+══════════════════════════════════════════════════════════════════ */
+
+.login-page {
+  background-color: #f2f2f2;                   /* background abu terang */
+  display: flex;                               /* aktifkan flexbox */
+  justify-content: center;                     /* konten rata tengah horizontal */
+  align-items: center;                         /* konten rata tengah vertikal */
+  height: 100vh;                               /* tinggi penuh layar */
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   2. CONTAINER UTAMA
+   Kotak putih yang membungkus form dan gambar
+══════════════════════════════════════════════════════════════════ */
+
+.login-container {
+  width: 100%;                                 /* lebar mengikuti parent */
+  max-width: 1000px;                           /* tidak lebih dari 1000px */
+  min-height: 600px;                           /* tinggi minimal agar tidak terlalu pendek */
+  background-color: #ffffff;                   /* background putih */
+  padding: 30px;                               /* jarak dalam container */
+  border-radius: 30px;                         /* sudut membulat */
+  box-shadow: 0 2px 15px rgba(0,0,0,0.1);     /* bayangan halus */
+  display: flex;                               /* bagi menjadi kiri (form) dan kanan (gambar) */
+  align-items: stretch;                        /* tinggi kiri dan kanan sama */
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   3. BAGIAN KIRI — FORM LOGIN
+   Area form dengan logo, judul, dan input
+══════════════════════════════════════════════════════════════════ */
+
+.login-form {
+  flex: 4;                                     /* ambil 40% lebar container */
+  padding-right: 20px;                         /* jarak dari gambar di kanan */
+  display: flex;                               /* susun konten secara vertikal */
+  flex-direction: column;
+  justify-content: center;                     /* rata tengah vertikal */
+}
+
+
+/* ── HEADER FORM (logo + judul) ── */
+
+.login-header {
+  margin-bottom: 20px;                         /* jarak ke form di bawahnya */
+  text-align: center;                          /* semua rata tengah */
+}
+
+/* logo dengan animasi fade-in saat halaman dimuat */
+.login-logo {
+  width: 250px;                                /* lebar logo */
+  opacity: 0;                                  /* awalnya tidak terlihat */
+  transform: translateY(-5px);                 /* sedikit naik dari posisi normal */
+  transition: all 0.5s ease-in-out;           /* animasi masuk yang halus */
+}
+
+.login-logo.loaded {
+  opacity: 1;                                  /* muncul penuh setelah dimuat */
+  transform: translateY(0);                    /* kembali ke posisi normal */
+}
+
+.login-header h3 {
+  font-size: 20px;                             /* ukuran judul */
+  color: #004b8d;                              /* biru gelap */
+  font-weight: 600;                            /* semi-bold */
+  margin: 0;                                   /* hapus margin default */
+}
+
+.login-header p {
+  color: #666666;                              /* abu medium untuk subtitle */
+  margin-top: 5px;                             /* jarak dari judul */
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   4. FIELD INPUT
+   Label dan input form login
+══════════════════════════════════════════════════════════════════ */
+
+.form-group {
+  margin-bottom: 15px;                         /* jarak antar field */
+}
+
+.form-group label {
+  font-weight: 500;                            /* tebal sedang */
+  color: #000000;                              /* hitam */
+  font-size: 14px;                             /* ukuran label */
+  display: block;                              /* tampil satu baris sendiri */
+  margin-bottom: 5px;                          /* jarak ke input di bawahnya */
+}
+
+.form-group input {
+  width: 100%;                                 /* lebar penuh */
+  padding: 10px;                               /* jarak dalam input */
+  border: 1px solid #cccccc;                   /* border abu */
+  border-radius: 12px;                         /* sudut membulat */
+  font-size: 14px;                             /* ukuran teks */
+  color: #000000;                              /* teks hitam */
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   5. TOGGLE LIHAT PASSWORD
+   Ikon mata yang bisa diklik untuk tampilkan/sembunyikan password
+══════════════════════════════════════════════════════════════════ */
+
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 2.5rem; /* beri ruang buat icon */
+}
+
+.toggle-password {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+
+  /* Reset semua style bawaan button */
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  
+  /* Styling icon */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af; /* abu-abu netral */
+  font-size: 1rem;
+  line-height: 1;
+  
+  /* Transisi halus saat hover */
+  transition: color 0.15s ease;
+}
+
+.toggle-password:hover {
+  color: #6b7280;
+}
+
+.toggle-password:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   6. TOMBOL LOGIN
+══════════════════════════════════════════════════════════════════ */
+
+.btn-login {
+  background-color: rgb(11, 183, 39);          /* hijau terang */
+  color: #ffffff;                              /* teks putih */
+  padding: 10px;                               /* tinggi tombol */
+  border: none;                                /* hapus border default */
+  border-radius: 12px;                         /* sudut membulat */
+  cursor: pointer;                             /* tanda bisa diklik */
+  width: 100%;                                 /* lebar penuh */
+  font-size: 14px;                             /* ukuran teks */
+  transition: 0.2s;                            /* animasi hover */
+}
+
+.btn-login:hover {
+  opacity: 0.9;                                /* sedikit redup saat hover */
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   7. BAGIAN KANAN — GAMBAR
+   Foto yang mengisi sisi kanan container
+══════════════════════════════════════════════════════════════════ */
+
+.login-image {
+  flex: 6;                                     /* ambil 60% lebar container */
+  min-height: 400px;                           /* tinggi minimal agar tidak kosong */
+  overflow: hidden;                            /* sembunyikan bagian gambar yang keluar */
+  border-radius: 30px;                         /* sudut membulat */
+}
+
+.login-img {
+  width: 100%;                                 /* lebar penuh area gambar */
+  height: 600px;                               /* tinggi tetap */
+  object-fit: cover;                           /* isi area tanpa distorsi */
+  opacity: 0;                                  /* awalnya tidak terlihat */
+  transition: opacity 0.6s ease-in-out;        /* animasi fade-in */
+}
+
+.login-img.loaded {
+  opacity: 1;                                  /* muncul setelah gambar dimuat */
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   8. MODAL SUKSES LOGIN
+   Overlay gelap + kotak animasi yang muncul setelah login berhasil
+══════════════════════════════════════════════════════════════════ */
+
+/* latar gelap di belakang modal */
+.custom-backdrop {
+  position: fixed;                             /* menempel di layar */
+  top: 0;
+  left: 0;
+  width: 100%;                                 /* cover seluruh layar */
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);             /* hitam 60% transparan */
+  z-index: 1050;                               /* di atas semua konten */
+}
+
+/* wrapper modal — untuk posisikan kotak di tengah */
+.custom-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;                         /* rata tengah vertikal */
+  justify-content: center;                     /* rata tengah horizontal */
+  z-index: 1060;                               /* di atas backdrop */
+}
+
+/* kotak modal sukses */
+.modal-card {
+  background: #ffffff;                         /* background putih */
+  padding: 40px;                               /* jarak dalam */
+  border-radius: 12px;                         /* sudut membulat */
+  width: 350px;                                /* lebar tetap */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* bayangan kuat agar terasa melayang */
+  animation: fadeInScale 0.3s ease;            /* muncul dengan animasi */
+}
+
+/* ikon centang besar di dalam modal */
+.success-icon {
+  font-size: 70px;                             /* ikon besar */
+  color: #28a745;                              /* hijau sukses */
+}
+
+/* animasi modal muncul dari kecil ke normal */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;                                /* mulai transparan */
+    transform: scale(0.8);                     /* mulai lebih kecil */
+  }
+  to {
+    opacity: 1;                                /* muncul penuh */
+    transform: scale(1);                       /* ukuran normal */
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   9. UTILITAS
+   Class kecil yang dipakai di beberapa tempat
+══════════════════════════════════════════════════════════════════ */
+
+/* highlight menu yang sedang aktif */
+.menu-link.active {
+  background-color: #cccccc !important;        /* !important untuk override Bootstrap */
+}
+
+/* ikon di dalam menu navigasi */
+.menu-icon {
+  width: 20px;                                 /* lebar tetap agar ikon sejajar */
+  text-align: center;                          /* ikon rata tengah */
+}
