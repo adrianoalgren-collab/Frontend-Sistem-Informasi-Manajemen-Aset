@@ -17,7 +17,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 // ======================================================
 
 // ── Auth ──
-import Login from "./pages/login";                          // halaman login
+import Login from "./pages/Login";                          // halaman login
 
 import IndexAsetBarangPakai from "./pages/AsetMaterial/IndexAsetMaterial";
 
