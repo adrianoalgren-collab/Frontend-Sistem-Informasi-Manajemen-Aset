@@ -7,6 +7,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useAuth } from "../components/AuthContext"; // ← tambah
+import api from "../services/api";
 
 
 // ======================================================
@@ -41,8 +42,8 @@ export default function Login() {
     setErrorMsg("");
 
     try {
-      const { data } = await axios.post(
-        "http://127.0.0.1:8000/api/login",
+      const { data } = await api.post(
+        "/login",
         { email, password },
         { headers: { Accept: "application/json" } }
       );
