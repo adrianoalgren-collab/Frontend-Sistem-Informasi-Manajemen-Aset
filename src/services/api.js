@@ -13,12 +13,13 @@ import axios from "axios";
 
 // buat instance axios dengan base URL backend
 // semua request akan dikirim ke http://127.0.0.1:8000/api/...
+export const BASE_URL = import.meta.env.DEV
+  ? "http://localhost:8000"
+  : import.meta.env.VITE_API_BASE_URL;
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL + "/api/",
+  baseURL: BASE_URL + "/api/",
 });
-
-console.log("API URL:", import.meta.env.VITE_API_BASE_URL);
-
 
 // ======================================================
 // === INTERCEPTOR REQUEST

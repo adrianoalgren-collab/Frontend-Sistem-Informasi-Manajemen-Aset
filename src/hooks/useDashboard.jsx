@@ -5,17 +5,7 @@
 // ======================================================
 
 import { useState, useEffect } from "react";
-import axios from "axios";
-
-const BASE_URL = "http://127.0.0.1:8000/api";
-
-// Helper: ambil header Authorization dari token di localStorage
-const authHeader = () => ({
-  headers: {
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
-    Accept: "application/json",
-  },
-});
+import api from "../../services/api";
 
 export function useDashboard() {
 
@@ -40,12 +30,12 @@ export function useDashboard() {
           resReq,
           resReport,
         ] = await Promise.all([
-          axios.get(`${BASE_URL}/user`,             authHeader()),
-          axios.get(`${BASE_URL}/department`,        authHeader()),
-          axios.get(`${BASE_URL}/manufacturer`,      authHeader()),
-          axios.get(`${BASE_URL}/asetoperasional`,   authHeader()),
-          axios.get(`${BASE_URL}/request/perbaikan`, authHeader()),
-          axios.get(`${BASE_URL}/report`,            authHeader()),
+          api.get("/user"),
+          api.get("/department"),
+          api.get("/manufacturer"),
+          api.get("/asetoperasional"),
+          api.get("/request/perbaikan"),
+          api.get("/report"),
         ]);
 
         setUsers(resUsers.data?.data             ?? resUsers.data             ?? []);

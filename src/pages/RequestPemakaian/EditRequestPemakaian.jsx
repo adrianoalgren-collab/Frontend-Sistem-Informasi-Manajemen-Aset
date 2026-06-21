@@ -3,15 +3,15 @@
 // ======================================================
 
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { useRequestPengadaanForm } from "../../hooks/RequestPengadaan/useRequestPengadaanForm";
-import { useState } from "react";
+import { useRequestPemakaianForm } from "../../hooks/RequestPemakaian/useRequestPemakaianForm";
 import { BASE_URL } from "../../services/api";
+import { useState } from "react";
 
 // ======================================================
 // === COMPONENT UTAMA
 // ======================================================
 
-export default function EditRequestPengadaan() {
+export default function EditRequestPemakaian() {
 
   // ======================================================
   // === ROUTING
@@ -27,8 +27,8 @@ export default function EditRequestPengadaan() {
   const {
     form,
     handleChange,
-    updateRequestPengadaan
-  } = useRequestPengadaanForm({ id });
+    updateRequestPemakaian
+  } = useRequestPemakaianForm({ id });
 
   // ======================================================
   // === UI STATE
@@ -42,18 +42,24 @@ export default function EditRequestPengadaan() {
 
   const handleSubmit = async () => {
     try {
-      await updateRequestPengadaan();
+      await updateRequestPemakaian();
 
       setShowSuccess(true);
 
       setTimeout(() => {
         setShowSuccess(false);
-        navigate("/request/pengadaan");
+        navigate("/request/pemakaian");
       }, 2000);
 
     } catch (error) {
       console.error(error);
-      alert("Gagal memperbarui request pengadaan");
+
+      const pesanError =
+        error.response?.data?.errors?.jumlah_pemakaian?.[0] ||
+        error.response?.data?.message ||
+        "Gagal memperbarui request pemakaian";
+
+      alert(pesanError);
     }
   };
 
@@ -69,7 +75,7 @@ export default function EditRequestPengadaan() {
         <div className="card-body d-flex justify-content-between align-items-center">
 
           <h4 className="mb-0 fw-bold">
-            Approval Request Pengadaan
+            Approval Request Pemakaian
           </h4>
 
           <nav aria-label="breadcrumb">
@@ -80,8 +86,8 @@ export default function EditRequestPengadaan() {
               </li>
 
               <li className="breadcrumb-item">
-                <Link to="/request/pengadaan">
-                  Data Request Pengadaan
+                <Link to="/request/pemakaian">
+                  Data Request Pemakaian
                 </Link>
               </li>
 
@@ -113,77 +119,54 @@ export default function EditRequestPengadaan() {
 
               <h6 className="upload-detail-title">
                 <i className="fa fa-info-circle me-2 icon-brand"></i>
-                Detail Request Pengadaan
+                Detail Request Pemakaian
               </h6>
 
-              {/* Jenis Aset */}
+              {/* Nama Barang */}
               <div className="form-group">
 
                 <label className="form-label">
-                  Jenis Aset
+                  Barang Diajukan
                 </label>
 
                 <span className="form-info">
-                  <i className="fa fa-tag me-2 icon-brand"></i>
-                  {form.jenis_aset === "barang_pakai"
-                    ? "Aset Barang Pakai"
-                    : "Aset Operasional"}
+                  <i className="fa fa-cube me-2 icon-brand"></i>
+                  {form.barangPakai?.nama_asetbarangpakai || "-"}
                 </span>
 
               </div>
 
-              {/* Nama Pengadaan */}
+              {/* Jumlah Pemakaian & Stok Saat Ini */}
               <div className="form-group">
 
                 <label className="form-label">
-                  Nama Pengadaan
+                  Jumlah Pemakaian
                 </label>
 
                 <span className="form-info">
-                  <i className="fa fa-box me-2 icon-brand"></i>
-                  {form.nama_pengadaan || "-"}
+                  <i className="fa fa-sort-numeric-up me-2 icon-brand"></i>
+                  {form.jumlah_pemakaian || "-"} {form.barangPakai?.satuan_asetbarangpakai || ""}
+                  {" "}
+                  <small>
+                    (Stok saat ini: {form.barangPakai?.stok_asetbarangpakai ?? "-"})
+                  </small>
                 </span>
 
               </div>
 
-              {/* Detail khusus Barang Pakai */}
-              {form.jenis_aset === "barang_pakai" && (
-                <>
+              {/* Keterangan Pemakaian */}
+              <div className="form-group">
 
-                  {/* Nama Barang */}
-                  <div className="form-group">
+                <label className="form-label">
+                  Keterangan Pemakaian
+                </label>
 
-                    <label className="form-label">
-                      Barang Diajukan
-                    </label>
+                <span className="form-info">
+                  <i className="fa fa-align-left me-2 icon-brand"></i>
+                  {form.keterangan_pemakaian || "-"}
+                </span>
 
-                    <span className="form-info">
-                      <i className="fa fa-cube me-2 icon-brand"></i>
-                      {form.barangPakai?.nama_asetbarangpakai || "-"}
-                    </span>
-
-                  </div>
-
-                  {/* Jumlah Pengadaan & Stok Saat Ini */}
-                  <div className="form-group">
-
-                    <label className="form-label">
-                      Jumlah Pengadaan
-                    </label>
-
-                    <span className="form-info">
-                      <i className="fa fa-sort-numeric-up me-2 icon-brand"></i>
-                      {form.jumlah_pengadaan || "-"} {form.barangPakai?.satuan_asetbarangpakai || ""}
-                      {" "}
-                      <small>
-                        (Stok saat ini: {form.barangPakai?.stok_asetbarangpakai ?? "-"})
-                      </small>
-                    </span>
-
-                  </div>
-
-                </>
-              )}
+              </div>
 
               {/* Department */}
               <div className="form-group">
@@ -200,50 +183,48 @@ export default function EditRequestPengadaan() {
               </div>
 
               {/* Tanggal Pengajuan */}
-                <div className="form-group">
-
-                  <label className="form-label">
-                    Tanggal Pengajuan
-                  </label>
-
-                  <span className="form-info">
-                    <i className="fa fa-calendar me-2 icon-brand"></i>
-                    {form.tanggal_request
-                      ? new Date(form.tanggal_request).toLocaleDateString("id-ID", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        })
-                      : "-"}
-                  </span>
-
-                </div>
-
-              {/* File Request */}
               <div className="form-group">
 
                 <label className="form-label">
-                  File Request
+                  Tanggal Pengajuan
                 </label>
 
-                {form.file_request ? (
-                  <a
-                    href={`${BASE_URL}/storage/${form.file_request}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-action btn-edit btn-file"
-                  >
-                    <i className="fa fa-file-alt"></i>
-                    Lihat File
-                  </a>
-                ) : (
-                  <span className="form-info">
-                    <i className="fa fa-file-times me-2 icon-brand"></i>
-                    Tidak ada file
-                  </span>
-                )}
+                <span className="form-info">
+                  <i className="fa fa-calendar me-2 icon-brand"></i>
+                  {form.tanggal_request
+                    ? new Date(form.tanggal_request).toLocaleDateString("id-ID", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })
+                    : "-"}
+                </span>
 
               </div>
+
+              {/* File Request */}
+            <div className="form-group">
+            <label className="form-label">
+                File Request
+            </label>
+
+            {form.file_request ? (
+                <a                       
+                href={`${BASE_URL}/storage/${form.file_request}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-action btn-edit btn-file"
+                >
+                <i className="fa fa-file-alt"></i>
+                Lihat File
+                </a>
+            ) : (
+                <span className="form-info">
+                <i className="fa fa-file-times me-2 icon-brand"></i>
+                Tidak ada file
+                </span>
+            )}
+            </div>
 
             </div>
 
@@ -316,7 +297,7 @@ export default function EditRequestPengadaan() {
                 </button>
 
                 <Link
-                  to="/request/pengadaan"
+                  to="/request/pemakaian"
                   className="btn-action btn-edit"
                 >
                   Batal
@@ -342,7 +323,7 @@ export default function EditRequestPengadaan() {
             </div>
             <div className="modal-body-content text-center">
               <i className="fa fa-check-circle fa-3x mb-3 icon-brand"></i>
-              <p>Data request pengadaan berhasil diperbarui.</p>
+              <p>Data request pemakaian berhasil diperbarui.</p>
               <small>Mengalihkan ke halaman data...</small>
             </div>
           </div>

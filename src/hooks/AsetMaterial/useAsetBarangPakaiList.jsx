@@ -3,7 +3,7 @@
 // ======================================================
 
 import { useState, useEffect } from "react";
-import api from "../../services/api";
+import api, { BASE_URL } from "../../services/api";
 
 // ======================================================
 // === CUSTOM HOOK LIST ASET BARANG PAKAI
@@ -132,7 +132,7 @@ export const useAsetBarangPakaiList = () => {
 
   const getFotoUrl = (filename) => {
     if (!filename) return null;
-    return `http://127.0.0.1:8000/uploads/aset/${filename}`;
+    return `${BASE_URL}/uploads/aset/${filename}`;
   };
 
   // ======================================================

@@ -106,9 +106,9 @@ export const useManufacturerList = () => {
         : bVal - aVal;
     }
 
-    return sortDir === "asc"
-      ? String(aVal).localeCompare(String(aVal))
-      : String(bVal).localeCompare(String(aVal));
+   return sortDir === "asc"
+    ? String(aVal).localeCompare(String(bVal))
+    : String(bVal).localeCompare(String(aVal));
   });
 
   // ======================================================

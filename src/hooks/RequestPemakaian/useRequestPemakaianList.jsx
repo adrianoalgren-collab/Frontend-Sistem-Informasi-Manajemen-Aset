@@ -6,16 +6,16 @@ import { useState, useEffect } from "react";
 import api from "../../services/api";
 
 // ======================================================
-// === CUSTOM HOOK LIST REQUEST PENGADAAN
+// === CUSTOM HOOK LIST REQUEST PEMAKAIAN
 // ======================================================
 
-export const useRequestPengadaanList = () => {
+export const useRequestPemakaianList = () => {
 
   // ======================================================
   // === STATE DATA
   // ======================================================
 
-  const [requestPengadaan, setRequestPengadaan] = useState([]);
+  const [requestPemakaian, setRequestPemakaian] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
@@ -23,18 +23,18 @@ export const useRequestPengadaanList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const [sortBy, setSortBy] = useState("id_request_pengadaan");
+  const [sortBy, setSortBy] = useState("id_request_pemakaian");
   const [sortDir, setSortDir] = useState("asc");
 
   // ======================================================
   // === FETCH DATA
   // ======================================================
 
-  const fetchRequestPengadaan = async () => {
+  const fetchRequestPemakaian = async () => {
     try {
       setLoading(true);
 
-      const res = await api.get("/request/pengadaan");
+      const res = await api.get("/request/pemakaian");
       const data = res.data.data || res.data;
 
       // Pastikan relasi department, user, dan barangPakai tersedia
@@ -42,33 +42,31 @@ export const useRequestPengadaanList = () => {
         ...item,
         department: item.department || null,
         user: item.user || null,
-        barangPakai: item.barangPakai || null,
+        barangPakai: item.barang_pakai || null,
       }));
 
-      setRequestPengadaan(mappedData);
+      setRequestPemakaian(mappedData);
 
     } catch (error) {
-      console.error("Gagal mengambil data request pengadaan", error);
+      console.error("Gagal mengambil data request pemakaian", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchRequestPengadaan();
+    fetchRequestPemakaian();
   }, []);
 
   // ======================================================
   // === SEARCH FILTER
   // ======================================================
 
-  const filteredData = requestPengadaan.filter((item) => {
+  const filteredData = requestPemakaian.filter((item) => {
     const keyword = search.toLowerCase();
 
     return (
-      item.nama_pengadaan?.toLowerCase().includes(keyword) ||
-      item.kategori_pengadaan?.toLowerCase().includes(keyword) ||
-      item.jenis_aset?.toLowerCase().includes(keyword) ||
+      item.keterangan_pemakaian?.toLowerCase().includes(keyword) ||
       item.barangPakai?.nama_asetbarangpakai?.toLowerCase().includes(keyword) ||
       item.user?.name?.toLowerCase().includes(keyword) ||
       item.department?.nama_department?.toLowerCase().includes(keyword) ||
@@ -123,17 +121,17 @@ export const useRequestPengadaanList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await api.delete(`/request/pengadaan/${id}`);
+      await api.delete(`/request/pemakaian/${id}`);
 
-      setRequestPengadaan((prev) =>
+      setRequestPemakaian((prev) =>
         prev.filter(
-          (item) => item.id_request_pengadaan !== id
+          (item) => item.id_request_pemakaian !== id
         )
       );
 
     } catch (error) {
       console.error(error);
-      alert("Gagal menghapus request pengadaan");
+      alert("Gagal menghapus request pemakaian");
     }
   };
 
@@ -143,7 +141,7 @@ export const useRequestPengadaanList = () => {
 
   return {
     // DATA
-    requestPengadaan,
+    requestPemakaian,
     loading,
 
     // SEARCH
@@ -171,6 +169,6 @@ export const useRequestPengadaanList = () => {
     handleDelete,
 
     // REFRESH
-    fetchRequestPengadaan,
+    fetchRequestPemakaian,
   };
 };

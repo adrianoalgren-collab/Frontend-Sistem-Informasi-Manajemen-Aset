@@ -3,17 +3,16 @@
 // ======================================================
 
 import { Link, useNavigate } from "react-router-dom";
-import { useRequestPengadaanList } from "../../hooks/RequestPengadaan/useRequestPengadaanList";
+import { useRequestPemakaianList } from "../../hooks/RequestPemakaian/useRequestPemakaianList";
 import { useState } from "react";
 import SortableTh from "../../components/SortableTh";
 import { BASE_URL } from "../../services/api";
-
 
 // ======================================================
 // === KOMPONEN UTAMA
 // ======================================================
 
-export default function IndexRequestPengadaan() {
+export default function IndexRequestPemakaian() {
   // ======================================================
   // === DATA LOGIC
   // ======================================================
@@ -32,7 +31,7 @@ export default function IndexRequestPengadaan() {
     setSortBy,
     sortDir,
     setSortDir,
-  } = useRequestPengadaanList();
+  } = useRequestPemakaianList();
 
   const navigate = useNavigate();
 
@@ -100,7 +99,7 @@ export default function IndexRequestPengadaan() {
       <div className="card shadow-sm mb-3">
         <div className="card-body d-flex justify-content-between align-items-center">
           <h4 className="mb-0 fw-bold">
-            Data Request Pengadaan
+            Data Request Pemakaian
           </h4>
 
           <nav aria-label="breadcrumb">
@@ -109,7 +108,7 @@ export default function IndexRequestPengadaan() {
                 <Link to="/">Home</Link>
               </li>
               <li className="breadcrumb-item active">
-                Request Pengadaan
+                Request Pemakaian
               </li>
             </ol>
           </nav>
@@ -146,7 +145,7 @@ export default function IndexRequestPengadaan() {
             <input
               type="text"
               className="dark-input"
-              placeholder="Cari nama / department..."
+              placeholder="Cari barang / department..."
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
@@ -157,7 +156,7 @@ export default function IndexRequestPengadaan() {
             <button
               className="btn-brand"
               onClick={() =>
-                navigate("/request/pengadaan/tambah")
+                navigate("/request/pemakaian/tambah")
               }
             >
               <i className="fa fa-plus"></i>
@@ -219,13 +218,15 @@ export default function IndexRequestPengadaan() {
                 <th>No</th>
 
                 <SortableTh
-                  label="Nama"
-                  field="nama_pengadaan"
+                  label="Barang"
+                  field="barangPakai"
                   sortBy={sortBy}
                   sortDir={sortDir}
                   setSortBy={setSortBy}
                   setSortDir={setSortDir}
                 />
+
+                <th>Jumlah</th>
 
                 <SortableTh
                   label="Department"
@@ -253,23 +254,27 @@ export default function IndexRequestPengadaan() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="6">
+                  <td colSpan="7">
                     Loading...
                   </td>
                 </tr>
               ) : currentData.length === 0 ? (
                 <tr>
-                  <td colSpan="6">
+                  <td colSpan="7">
                     Tidak ada data
                   </td>
                 </tr>
               ) : (
                 currentData.map((row, index) => (
-                  <tr key={row.id_request_pengadaan}>
+                  <tr key={row.id_request_pemakaian}>
                     <td>{start + index + 1}</td>
 
                     <td>
-                      {row.nama_pengadaan || "-"}
+                      {row.barangPakai?.nama_asetbarangpakai || "-"}
+                    </td>
+
+                    <td>
+                      {row.jumlah_pemakaian || "-"} {row.barangPakai?.satuan_asetbarangpakai || ""}
                     </td>
 
                     <td>
@@ -285,19 +290,19 @@ export default function IndexRequestPengadaan() {
                     </td>
 
                     <td>
-                      {row.file_request ? (
-                        <a
-                          href={`${BASE_URL}/storage/${row.file_request}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn-action btn-edit btn-file"
+                    {row.file_request ? (
+                        <a               
+                        href={`${BASE_URL}/storage/${row.file_request}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-action btn-edit btn-file"
                         >
-                          <i className="fa fa-file-alt"></i>
-                          Lihat File
+                        <i className="fa fa-file-alt"></i>
+                        Lihat File
                         </a>
-                      ) : (
+                    ) : (
                         "-"
-                      )}
+                    )}
                     </td>
 
                     <td>
@@ -307,7 +312,7 @@ export default function IndexRequestPengadaan() {
                           className="btn-action btn-edit"
                           onClick={() =>
                             navigate(
-                              `/request/pengadaan/edit/${row.id_request_pengadaan}`
+                              `/request/pemakaian/edit/${row.id_request_pemakaian}`
                             )
                           }
                         >
@@ -319,7 +324,7 @@ export default function IndexRequestPengadaan() {
                           className="btn-action btn-delete"
                           onClick={() => {
                             setSelectedId(
-                              row.id_request_pengadaan
+                              row.id_request_pemakaian
                             );
                             setShowModal(true);
                           }}

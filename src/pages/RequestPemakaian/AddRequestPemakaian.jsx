@@ -3,7 +3,7 @@
 // ======================================================
 
 import { Link, useNavigate } from "react-router-dom";
-import { useRequestPengadaanForm } from "../../hooks/RequestPengadaan/useRequestPengadaanForm";
+import { useRequestPemakaianForm } from "../../hooks/RequestPemakaian/useRequestPemakaianForm";
 import { useRole } from "../../hooks/useRole";
 import { useState } from "react";
 
@@ -11,7 +11,7 @@ import { useState } from "react";
 // === KOMPONEN UTAMA
 // ======================================================
 
-export default function AddRequestPengadaan() {
+export default function AddRequestPemakaian() {
 
   const navigate = useNavigate();
  
@@ -24,14 +24,14 @@ export default function AddRequestPengadaan() {
   } = useRole();
 
    const redirectTo = isAdmin
-    ? "/request/pengadaan"
-    : "/request/pengadaan/staff";
+    ? "/request/pemakaian"
+    : "/request/pemakaian/staff";
 
 
   const {
     form,
     handleChange,
-    storeRequestPengadaan,
+    storeRequestPemakaian,
     today,
     fileInputRef,
     selectedFile,
@@ -44,7 +44,7 @@ export default function AddRequestPengadaan() {
     getFileIcon,
     daftarBarangPakai,
     loadingBarangPakai,
-  } = useRequestPengadaanForm({
+  } = useRequestPemakaianForm({
     defaultValues: {
       status_approval: "Pending",
       id_user: userId,
@@ -57,7 +57,7 @@ export default function AddRequestPengadaan() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    storeRequestPengadaan()
+    storeRequestPemakaian()
       .then(() => {
 
         setShowSuccess(true);
@@ -69,7 +69,7 @@ export default function AddRequestPengadaan() {
 
       })
       .catch(() => {
-        alert("Gagal menyimpan request pengadaan");
+        alert("Gagal menyimpan request pemakaian");
       });
   };
 
@@ -86,7 +86,7 @@ export default function AddRequestPengadaan() {
         <div className="card-body d-flex justify-content-between align-items-center">
 
           <h4 className="mb-0 fw-bold">
-            Tambah Request Pengadaan
+            Tambah Request Pemakaian
           </h4>
 
           <nav aria-label="breadcrumb">
@@ -98,8 +98,8 @@ export default function AddRequestPengadaan() {
               </li>
 
               <li className="breadcrumb-item">
-                <Link to="/request/pengadaan">
-                  Data Request Pengadaan
+                <Link to="/request/pemakaian">
+                  Data Request Pemakaian
                 </Link>
               </li>
 
@@ -219,122 +219,76 @@ export default function AddRequestPengadaan() {
 
               <h6 className="upload-detail-title">
                 <i className="fa fa-info-circle me-2 icon-brand"></i>
-                Detail Request Pengadaan
+                Detail Request Pemakaian
               </h6>
 
-              {/* Jenis Aset */}
+              {/* Pilih Barang */}
               <div className="form-group">
 
                 <label className="form-label">
-                  Jenis Aset
+                  Pilih Barang
                 </label>
 
                 <select
-                  name="jenis_aset"
+                  name="id_barang_pakai"
                   className="dark-input"
-                  value={form.jenis_aset || "operasional"}
+                  value={form.id_barang_pakai || ""}
                   onChange={handleChange}
                   required
+                  disabled={loadingBarangPakai}
                 >
-                  <option value="operasional">Aset Operasional</option>
-                  <option value="barang_pakai">Aset Barang Pakai</option>
+                  <option value="">
+                    {loadingBarangPakai
+                      ? "Memuat daftar barang..."
+                      : "-- Pilih Barang --"}
+                  </option>
+
+                  {daftarBarangPakai.map((barang) => (
+                    <option
+                      key={barang.id_barang_pakai}
+                      value={barang.id_barang_pakai}
+                    >
+                      {barang.nama_asetbarangpakai} (Stok: {barang.stok_asetbarangpakai} {barang.satuan_asetbarangpakai})
+                    </option>
+                  ))}
                 </select>
 
               </div>
 
-              {/* Field khusus Barang Pakai */}
-              {form.jenis_aset === "barang_pakai" && (
-                <>
-
-                  {/* Pilih Barang */}
-                  <div className="form-group">
-
-                    <label className="form-label">
-                      Pilih Barang
-                    </label>
-
-                    <select
-                      name="id_barang_pakai"
-                      className="dark-input"
-                      value={form.id_barang_pakai || ""}
-                      onChange={handleChange}
-                      required
-                      disabled={loadingBarangPakai}
-                    >
-                      <option value="">
-                        {loadingBarangPakai
-                          ? "Memuat daftar barang..."
-                          : "-- Pilih Barang --"}
-                      </option>
-
-                      {daftarBarangPakai.map((barang) => (
-                        <option
-                          key={barang.id_barang_pakai}
-                          value={barang.id_barang_pakai}
-                        >
-                          {barang.nama_asetbarangpakai} (Stok: {barang.stok_asetbarangpakai} {barang.satuan_asetbarangpakai})
-                        </option>
-                      ))}
-                    </select>
-
-                  </div>
-
-                  {/* Jumlah Pengadaan */}
-                  <div className="form-group">
-
-                    <label className="form-label">
-                      Jumlah Pengadaan
-                    </label>
-
-                    <input
-                      type="number"
-                      name="jumlah_pengadaan"
-                      className="dark-input"
-                      placeholder="Contoh: 10"
-                      min="1"
-                      value={form.jumlah_pengadaan || ""}
-                      onChange={handleChange}
-                      required
-                    />
-
-                  </div>
-
-                </>
-              )}
-
-              {/* Nama Pengadaan */}
+              {/* Jumlah Pemakaian */}
               <div className="form-group">
 
                 <label className="form-label">
-                  Nama Pengadaan
+                  Jumlah Pemakaian
                 </label>
 
                 <input
-                  type="text"
-                  name="nama_pengadaan"
+                  type="number"
+                  name="jumlah_pemakaian"
                   className="dark-input"
-                  placeholder="Contoh: Pengadaan Laptop Staff IT"
-                  value={form.nama_pengadaan || ""}
+                  placeholder="Contoh: 5"
+                  min="1"
+                  value={form.jumlah_pemakaian || ""}
                   onChange={handleChange}
                   required
                 />
 
               </div>
 
-              {/* Kategori */}
+              {/* Keterangan Pemakaian */}
               <div className="form-group">
 
                 <label className="form-label">
-                  Kategori Pengadaan
+                  Keterangan Pemakaian
                 </label>
 
-                <input
-                  type="text"
-                  name="kategori_pengadaan"
+                <textarea
+                  name="keterangan_pemakaian"
                   className="dark-input"
-                  placeholder="Contoh: IT Equipment"
-                  value={form.kategori_pengadaan || ""}
+                  placeholder="Contoh: Untuk kebutuhan rapat divisi Marketing"
+                  value={form.keterangan_pemakaian || ""}
                   onChange={handleChange}
+                  rows={4}
                   required
                 />
 
@@ -428,7 +382,7 @@ export default function AddRequestPengadaan() {
                 </button>
 
                 <Link
-                  to="/request/pengadaan"
+                  to="/request/pemakaian"
                   className="btn-action btn-edit"
                 >
                   Batal
@@ -454,7 +408,7 @@ export default function AddRequestPengadaan() {
             </div>
             <div className="modal-body-content text-center">
               <i className="fa fa-check-circle fa-3x mb-3 icon-brand"></i>
-              <p>Data request pengadaan berhasil disimpan.</p>
+              <p>Data request pemakaian berhasil disimpan.</p>
               <small>Mengalihkan ke halaman data...</small>
             </div>
           </div>

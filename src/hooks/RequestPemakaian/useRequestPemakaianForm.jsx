@@ -7,10 +7,10 @@ import api from "../../services/api";
 import { useParams } from "react-router-dom";
 
 // ======================================================
-// === CUSTOM HOOK FORM REQUEST PENGADAAN
+// === CUSTOM HOOK FORM REQUEST PEMAKAIAN
 // ======================================================
 
-export const useRequestPengadaanForm = ({ defaultValues = {} } = {}) => {
+export const useRequestPemakaianForm = ({ defaultValues = {} } = {}) => {
   const { id } = useParams();
 
   // ======================================================
@@ -30,19 +30,15 @@ export const useRequestPengadaanForm = ({ defaultValues = {} } = {}) => {
   // ======================================================
 
   const [form, setForm] = useState({
-    nama_pengadaan: "",
-    kategori_pengadaan: "",
+    id_barang_pakai: "",
+    jumlah_pemakaian: "",
+    keterangan_pemakaian: "",
     id_department: "",
     id_user: "",
     status_approval: "Pending",
     catatan_manager: "",
     file_request: "",
     tanggal_request: today,
-
-    // jenis aset
-    jenis_aset: "operasional",
-    id_barang_pakai: "",
-    jumlah_pengadaan: "",
 
     // relasi untuk readonly detail
     department: null,
@@ -96,15 +92,6 @@ export const useRequestPengadaanForm = ({ defaultValues = {} } = {}) => {
       setForm((prev) => ({
         ...prev,
         file_request: files[0] ?? null,
-      }));
-    } else if (name === "jenis_aset") {
-      // Reset field barang pakai saat jenis aset diganti,
-      // supaya tidak ada data nyangkut dari pilihan sebelumnya
-      setForm((prev) => ({
-        ...prev,
-        jenis_aset: value,
-        id_barang_pakai: "",
-        jumlah_pengadaan: "",
       }));
     } else {
       setForm((prev) => ({
@@ -185,37 +172,24 @@ export const useRequestPengadaanForm = ({ defaultValues = {} } = {}) => {
   // === STORE REQUEST
   // ======================================================
 
-  const storeRequestPengadaan = async () => {
+  const storeRequestPemakaian = async () => {
     try {
       const formData = new FormData();
 
       formData.append(
-        "nama_pengadaan",
-        form.nama_pengadaan
+        "id_barang_pakai",
+        form.id_barang_pakai
       );
 
       formData.append(
-        "kategori_pengadaan",
-        form.kategori_pengadaan
+        "jumlah_pemakaian",
+        form.jumlah_pemakaian
       );
 
       formData.append(
-        "jenis_aset",
-        form.jenis_aset
+        "keterangan_pemakaian",
+        form.keterangan_pemakaian
       );
-
-      // Field khusus Barang Pakai, hanya dikirim jika jenis_aset = barang_pakai
-      if (form.jenis_aset === "barang_pakai") {
-        formData.append(
-          "id_barang_pakai",
-          form.id_barang_pakai
-        );
-
-        formData.append(
-          "jumlah_pengadaan",
-          form.jumlah_pengadaan
-        );
-      }
 
       formData.append(
         "id_department",
@@ -243,7 +217,7 @@ export const useRequestPengadaanForm = ({ defaultValues = {} } = {}) => {
       );
 
       return await api.post(
-        "/request/pengadaan",
+        "/request/pemakaian",
         formData,
         {
           headers: {
@@ -273,7 +247,7 @@ export const useRequestPengadaanForm = ({ defaultValues = {} } = {}) => {
     const fetchById = async () => {
       try {
         const response = await api.get(
-          `/request/pengadaan/${id}`
+          `/request/pemakaian/${id}`
         );
 
         // FIX PENTING:
@@ -284,7 +258,7 @@ export const useRequestPengadaanForm = ({ defaultValues = {} } = {}) => {
 
         if (!data) {
           console.error(
-            "Data request pengadaan kosong"
+            "Data request pemakaian kosong"
           );
           return;
         }
@@ -292,11 +266,14 @@ export const useRequestPengadaanForm = ({ defaultValues = {} } = {}) => {
         setForm((prev) => ({
           ...prev,
 
-          nama_pengadaan:
-            data.nama_pengadaan || "",
+          id_barang_pakai:
+            data.id_barang_pakai || "",
 
-          kategori_pengadaan:
-            data.kategori_pengadaan || "",
+          jumlah_pemakaian:
+            data.jumlah_pemakaian || "",
+
+          keterangan_pemakaian:
+            data.keterangan_pemakaian || "",
 
           id_department:
             data.id_department || "",
@@ -316,15 +293,6 @@ export const useRequestPengadaanForm = ({ defaultValues = {} } = {}) => {
           file_request:
             data.file_request || "",
 
-          jenis_aset:
-            data.jenis_aset || "operasional",
-
-          id_barang_pakai:
-            data.id_barang_pakai || "",
-
-          jumlah_pengadaan:
-            data.jumlah_pengadaan || "",
-
           // relasi readonly
           department:
             data.department || null,
@@ -337,7 +305,7 @@ export const useRequestPengadaanForm = ({ defaultValues = {} } = {}) => {
         }));
       } catch (error) {
         console.error(
-          "Gagal mengambil detail request pengadaan:",
+          "Gagal mengambil detail request pemakaian:",
           error
         );
       }
@@ -350,7 +318,7 @@ export const useRequestPengadaanForm = ({ defaultValues = {} } = {}) => {
   // === UPDATE REQUEST
   // ======================================================
 
-  const updateRequestPengadaan = async () => {
+  const updateRequestPemakaian = async () => {
     const formData = new FormData();
 
     formData.append(
@@ -366,7 +334,7 @@ export const useRequestPengadaanForm = ({ defaultValues = {} } = {}) => {
     formData.append("_method", "PUT");
 
     return await api.post(
-      `/request/pengadaan/${id}`,
+      `/request/pemakaian/${id}`,
       formData,
       {
         headers: {
@@ -386,8 +354,8 @@ export const useRequestPengadaanForm = ({ defaultValues = {} } = {}) => {
     setForm,
     handleChange,
 
-    storeRequestPengadaan,
-    updateRequestPengadaan,
+    storeRequestPemakaian,
+    updateRequestPemakaian,
 
     id,
     today,

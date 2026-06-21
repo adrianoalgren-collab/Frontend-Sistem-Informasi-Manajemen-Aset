@@ -31,9 +31,15 @@ export default function CompHeader() {
   const requestPerbaikanTo = isAdmin ? "/request/perbaikan" : "/request/perbaikan/staff";
   const reportTo           = isAdmin ? "/report"            : "/report/staff";
   const requestPengadaanTo = isAdmin ? "/request/pengadaan" : "/request/pengadaan/staff";
+  const requestPemakaianTo = isAdmin ? "/request/pemakaian" : "/request/pemakaian/staff";
 
   const isRequestActive = location.pathname.startsWith("/request") || location.pathname.startsWith("/requestPengadaan");
   const isRequestOpen   = openRequest || isRequestActive;
+
+  // State
+  const [isAsetOpen, setIsAsetOpen] = useState(false);
+  const isAsetActive = location.pathname.startsWith("/asetoperasional") || 
+                      location.pathname.startsWith("/jenisasetoperasional");
 
 
   return (
@@ -86,26 +92,35 @@ export default function CompHeader() {
 
           <div className="nav-section-label">Data Aset</div>
 
-          <NavLink to="/indexAsetMaterial"
+          <NavLink to="/asetbarangpakai"
             className={({ isActive }) => `nav-link-item${isActive ? " active" : ""}`}
             data-tooltip="Aset Barang Pakai">
             <span className="nav-icon"><i className="fa fa-boxes" /></span>
             <span className="nav-label">Aset Barang Pakai</span>
           </NavLink>
 
-          <NavLink to="/asetoperasional"
-            className={({ isActive }) => `nav-link-item${isActive ? " active" : ""}`}
-            data-tooltip="Aset Operasional">
+          <button
+            className={`nav-link-item${isAsetActive ? " active" : ""}`}
+            onClick={() => setIsAsetOpen(prev => !prev)}
+            data-tooltip="Aset Operasional"
+            style={{ width: "100%", background: "none", border: "none", cursor: "pointer" }}
+          >
             <span className="nav-icon"><i className="fa fa-cogs" /></span>
             <span className="nav-label">Aset Operasional</span>
-          </NavLink>
+            <i className={`fa fa-chevron-down nav-chevron${isAsetOpen ? " open" : ""}`} />
+          </button>
 
-           <NavLink to="/jenisasetoperasional"
-            className={({ isActive }) => `nav-link-item${isActive ? " active" : ""}`}
-            data-tooltip="Aset Operasional">
-            <span className="nav-icon"><i className="fa fa-cogs" /></span>
-            <span className="nav-label"> Jenis Aset Operasional</span>
-          </NavLink>
+          <div className={`submenu${isAsetOpen ? " open" : ""}`}>
+            <NavLink to="/asetoperasional"
+              className={({ isActive }) => `submenu-item${isActive ? " active" : ""}`}>
+              <i className="fa fa-cogs" /> Kode Aset
+            </NavLink>
+
+            <NavLink to="/jenisasetoperasional"
+              className={({ isActive }) => `submenu-item${isActive ? " active" : ""}`}>
+              <i className="fa fa-list" /> Nama Aset
+            </NavLink>
+          </div>
 
           <NavLink to="/asetKendaraan"
             className={({ isActive }) => `nav-link-item${isActive ? " active" : ""}`}
@@ -152,6 +167,11 @@ export default function CompHeader() {
             <NavLink to={requestPengadaanTo}
               className={({ isActive }) => `submenu-item${isActive ? " active" : ""}`}>
               <i className="fa fa-plus-circle" /> Request Pengadaan
+            </NavLink>
+
+            <NavLink to={requestPemakaianTo}
+              className={({ isActive }) => `submenu-item${isActive ? " active" : ""}`}>
+              <i className="fa fa-minus-circle" /> Request Pemakaian
             </NavLink>
           </div>
 

@@ -4,7 +4,7 @@
 
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api, { BASE_URL } from "../services/api";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
@@ -12,13 +12,6 @@ import {
 
 // ── Warna untuk chart ──
 const PIE_COLORS  = ["#16a34a", "#3b82f6", "#f59e0b", "#ef4444", "#8b5cf6"];
-const BASE_URL    = "http://127.0.0.1:8000/api";
-const authHeader  = () => ({
-  headers: {
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
-    Accept: "application/json",
-  },
-});
 
 // ── Status badge warna ──
 const statusStyle = {
@@ -48,12 +41,12 @@ export default function Dashboard() {
     const fetchAll = async () => {
       try {
         const [u, d, m, a, r, rep] = await Promise.all([
-          axios.get(`${BASE_URL}/user`,             authHeader()),
-          axios.get(`${BASE_URL}/department`,        authHeader()),
-          axios.get(`${BASE_URL}/manufacturer`,      authHeader()),
-          axios.get(`${BASE_URL}/asetoperasional`,   authHeader()),
-          axios.get(`${BASE_URL}/request/perbaikan`, authHeader()),
-          axios.get(`${BASE_URL}/report`,            authHeader()),
+          api.get("/user"),
+          api.get("/department"),
+          api.get("/manufacturer"),
+          api.get("/asetoperasional"),
+          api.get("/request/perbaikan"),
+          api.get("/report"),
         ]);
         setUsers(u.data?.data             ?? u.data   ?? []);
         setDepartments(d.data?.data       ?? d.data   ?? []);

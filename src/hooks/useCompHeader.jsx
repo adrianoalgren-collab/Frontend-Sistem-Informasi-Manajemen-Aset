@@ -3,7 +3,7 @@
 // ======================================================
 
 import { useNavigate } from "react-router-dom"; // Hook navigasi halaman
-import axios from "axios"; // HTTP client untuk request API
+import api from "../../services/api";
 
 // ======================================================
 // === CUSTOM HOOK HEADER
@@ -26,29 +26,15 @@ export const useCompHeader = () => {
   // ======================================================
 
   const handleLogout = async () => {
-    const token = localStorage.getItem("token"); // Ambil token dari localStorage
+  try {
+    await api.post("/logout");
+  } catch (error) {
+    console.log("Logout error:", error);
+  }
 
-    try {
-      // Request API logout
-      await axios.post(
-        "http://127.0.0.1:8000/api/logout",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
-        }
-      );
-    } catch (error) {
-      console.log("Logout error:", error); // Log error jika gagal
-    }
-
-    // Hapus token dari localStorage tetap dilakukan meskipun request gagal
-    localStorage.removeItem("token");
-
-    navigate("/"); // Redirect ke halaman login / home
-  };
+  localStorage.removeItem("token");
+  navigate("/");
+};
 
   // ======================================================
   // === RETURN VALUE

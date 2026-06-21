@@ -19,8 +19,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 // ── Auth ──
 import Login from "./pages/Login";                          // halaman login
 
-import IndexAsetBarangPakai from "./pages/AsetMaterial/IndexAsetMaterial";
-
 // ── Aset Material ──
 import IndexAsetMaterial  from "./pages/AsetMaterial/IndexAsetMaterial";
 import AddAsetMaterial    from "./pages/AsetMaterial/AddAsetMaterial";
@@ -38,6 +36,10 @@ import EditAsetOperasional   from "./pages/AsetOperasional/EditAsetOperasional";
 import AddJenisAsetOperasional from "./pages/AsetOperasional/AddJenisAsetOperasional";
 import IndexJenisAsetOperasional from "./pages/AsetOperasional/IndexJenisAsetOperasional";
 import EditJenisAsetOperasional from "./pages/AsetOperasional/EditJenisAsetOperasional";
+
+import IndexAsetBarangPakai from "./pages/AsetBarangPakai/IndexAsetBarangPakai";
+import AddAsetBarangPakai from "./pages/AsetBarangPakai/AddAsetBarangPakai";
+import EditAsetBarangPakai from "./pages/AsetBarangPakai/EditAsetBarangPakai";
 
 // ── Manufacturer ──
 import IndexManufacturer  from "./pages/Manufacturer/IndexManufacturer";
@@ -66,6 +68,12 @@ import IndexRequestPengadaan      from "./pages/RequestPengadaan/IndexRequestPen
 import AddRequestPengadaan        from "./pages/RequestPengadaan/AddRequestPengadaan";
 import EditRequestPengadaan       from "./pages/RequestPengadaan/EditRequestPengadaan";
 import IndexRequestPengadaanStaff from "./pages/RequestPengadaan/IndexRequestPengadaanStaff"; // portal staff
+
+// ── Request Pengadaan ──
+import IndexRequestPemakaian from "./pages/RequestPemakaian/IndexRequestPemakaian";    // halaman manager
+import AddRequestPemakaian        from "./pages/RequestPemakaian/AddRequestPemakaian";
+import EditRequestPemakaian      from "./pages/RequestPemakaian/EditRequestPemakaian";
+import IndexRequestPemakaianStaff from "./pages/RequestPemakaian/IndexRequestPemakaianStaff"; // portal staff
 
 // ── Aset Kendaraan ──
 import IndexAsetKendaraan      from "./pages/AsetKendaraan/IndexAsetKendaraan";      // halaman admin
@@ -119,9 +127,9 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
 
           {/* aset material */}
-          <Route path="/IndexAsetMaterial"      element={<IndexAsetMaterial />} />
-          <Route path="/AddAsetMaterial"        element={<AddAsetMaterial />} />
-          <Route path="/EditAsetMaterial/:id"   element={<EditAsetMaterial />} />
+          <Route path="/asetbarangpakai"      element={<IndexAsetBarangPakai />} />
+          <Route path="/asetbarangpakai/tambah"        element={<AddAsetBarangPakai />} />
+          <Route path="/asetbarangpakai/edit/:id"   element={<EditAsetBarangPakai />} />
 
           {/* user — hanya bisa diakses admin */}
           <Route path="/user"                   element={<IndexUser />} />
@@ -137,9 +145,6 @@ function App() {
           <Route path="/jenisasetoperasional/tambah"    element={<AddJenisAsetOperasional />} />
           <Route path="/jenisasetoperasional"           element={<IndexJenisAsetOperasional />} />
           <Route path="/jenisasetoperasional/edit/:id"  element={<EditJenisAsetOperasional />} />
-
-          {/* aset barang pakai */}
-          <Route path="/asetbarangpakai"           element={<IndexAsetBarangPakai />} />
 
           {/* manufacturer */}
           <Route path="/manufacturer"           element={<IndexManufacturer />} />
@@ -168,6 +173,12 @@ function App() {
           <Route path="/request/pengadaan/tambah"       element={<AddRequestPengadaan />} />
           <Route path="/request/pengadaan/edit/:id"     element={<EditRequestPengadaan />} />
           <Route path="/request/pengadaan/staff"        element={<IndexRequestPengadaanStaff />} />
+          
+          {/* request pemakaian — manager ke /request/pengadaan, staff ke /request/pengadaan/staff */}
+          <Route path="/request/pemakaian"              element={<IndexRequestPemakaian />} />
+          <Route path="/request/pemakaian/tambah"       element={<AddRequestPemakaian />} />
+          <Route path="/request/pemakaian/edit/:id"     element={<EditRequestPemakaian />} />
+          <Route path="/request/pemakaian/staff"        element={<IndexRequestPemakaian />} />
 
           {/* aset kendaraan — admin ke /asetkendaraan, staff ke /asetkendaraan/staff */}
           <Route path="/asetkendaraan"              element={<IndexAsetKendaraan />} />
