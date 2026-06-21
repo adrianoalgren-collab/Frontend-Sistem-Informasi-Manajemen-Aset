@@ -3,7 +3,7 @@
 // ======================================================
 
 import { useNavigate } from "react-router-dom"; // Hook navigasi halaman
-import api from "../../services/api";
+import api from "../services/api";
 
 // ======================================================
 // === CUSTOM HOOK HEADER
