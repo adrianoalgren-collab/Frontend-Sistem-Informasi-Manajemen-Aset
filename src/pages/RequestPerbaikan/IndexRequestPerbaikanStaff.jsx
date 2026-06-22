@@ -172,7 +172,7 @@ export default function IndexRequestPengadaanStaff() {
 
                 {/* Badge status — menampilkan teks status approval */}
                 <span className={`status-badge status-${statusClass(row.status_approval)}`}>
-                  {row.status_approval || "Pending"}
+                  {row.status_request || "Pending"}
                 </span>
 
                 {/* Tombol aksi — lihat file dan hapus request */}
