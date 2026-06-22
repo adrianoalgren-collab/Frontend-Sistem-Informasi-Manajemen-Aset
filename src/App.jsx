@@ -72,8 +72,10 @@ import IndexRequestPengadaanStaff from "./pages/RequestPengadaan/IndexRequestPen
 // ── Request Pengadaan ──
 import IndexRequestPemakaian from "./pages/RequestPemakaian/IndexRequestPemakaian";    // halaman manager
 import AddRequestPemakaian        from "./pages/RequestPemakaian/AddRequestPemakaian";
-import EditRequestPemakaian      from "./pages/RequestPemakaian/EditRequestPemakaian";
 import IndexRequestPemakaianStaff from "./pages/RequestPemakaian/IndexRequestPemakaianStaff"; // portal staff
+import EditRequestPemakaian      from "./pages/RequestPemakaian/EditRequestPemakaian";
+
+
 
 // ── Aset Kendaraan ──
 import IndexAsetKendaraan      from "./pages/AsetKendaraan/IndexAsetKendaraan";      // halaman admin
@@ -176,9 +178,10 @@ function App() {
           
           {/* request pemakaian — manager ke /request/pengadaan, staff ke /request/pengadaan/staff */}
           <Route path="/request/pemakaian"              element={<IndexRequestPemakaian />} />
+          <Route path="/request/pemakaian/staff"        element={<IndexRequestPemakaianStaff />} />
           <Route path="/request/pemakaian/tambah"       element={<AddRequestPemakaian />} />
           <Route path="/request/pemakaian/edit/:id"     element={<EditRequestPemakaian />} />
-          <Route path="/request/pemakaian/staff"        element={<IndexRequestPemakaianStaff />} />
+          
 
           {/* aset kendaraan — admin ke /asetkendaraan, staff ke /asetkendaraan/staff */}
           <Route path="/asetkendaraan"              element={<IndexAsetKendaraan />} />
