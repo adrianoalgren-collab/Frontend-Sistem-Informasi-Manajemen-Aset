@@ -171,8 +171,8 @@ export default function AssignDriver() {
             <div className="modal-head">
               <span className="modal-title">Berhasil</span>
             </div>
-            <div className="modal-body-content modal-body-content--center">
-              <i className="fa fa-check-circle fa-3x mb-3 icon-success"></i>
+            <div className="modal-body-content text-center">
+              <i className="fa fa-check-circle fa-3x mb-3 icon-brand"></i>
               <p>Driver berhasil di-assign ke kendaraan.</p>
               <small>Mengalihkan ke halaman data...</small>
             </div>
