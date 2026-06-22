@@ -1,65 +1,74 @@
-// ======================================================
-// === IMPORT
-// ======================================================
-
 import { Link, useNavigate } from "react-router-dom";
-import { useRequestPerbaikanList } from "../../hooks/RequestPerbaikan/useRequestPerbaikanList";
+import { useRequestPengadaanList } from "../../hooks/RequestPengadaan/useRequestPengadaanList";
 import { useRole } from "../../hooks/useRole";
 import { useState } from "react";
 
-// ======================================================
-// === KOMPONEN UTAMA — Portal pengajuan staff
-// ======================================================
+export default function IndexRequestPengadaanStaff() {
 
-export default function IndexRequestPerbaikanStaff() {
+  // Ambil daftar data request pengadaan dari hook
+  const { sortedData, loading, handleDelete } = useRequestPengadaanList();
+  const navigate = useNavigate(); // Digunakan untuk berpindah halaman
+  const { userId } = useRole();   // Ambil ID user yang sedang login
 
-  const { sortedData, loading, handleDelete } = useRequestPerbaikanList();
-  const navigate = useNavigate();
-  const { userId } = useRole();
-
-  // Filter hanya request milik user yang sedang login
+  // ======================================================
+  // FILTER DATA — Hanya tampilkan request milik user yang login
+  // Membandingkan ID user di data dengan ID user yang sedang aktif
+  // ======================================================
   const myRequests = sortedData.filter(
-    row => row.user?.id === userId || row.staff_id === userId
+    (row) => row.user?.id === userId || row.id_user === userId
   );
 
-  const [showModal, setShowModal]   = useState(false);
+  // ======================================================
+  // STATE — Untuk mengontrol tampilan modal konfirmasi hapus
+  // showModal: true = modal muncul, false = modal tersembunyi
+  // selectedId: menyimpan ID request yang akan dihapus
+  // ======================================================
+  const [showModal, setShowModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
 
-  // Hitung ringkasan status
-  const totalPending  = myRequests.filter(r => r.status_request === "pending").length;
-  const totalDiterima = myRequests.filter(r => r.status_request === "diterima").length;
-  const totalDitolak  = myRequests.filter(r => r.status_request === "ditolak").length;
+  // ======================================================
+  // HITUNG RINGKASAN STATUS — Menghitung jumlah request
+  // berdasarkan status approval yang dimiliki user
+  // ======================================================
+  const totalMenunggu = myRequests.filter(r => r.status_request?.toLowerCase() === "pending").length;
+  const totalDiterima = myRequests.filter(r => r.status_request?.toLowerCase() === "diterima").length;
+  const totalDitolak  = myRequests.filter(r => r.status_request?.toLowerCase() === "ditolak").length;
 
-  // Helper: class berdasarkan status
+  // ======================================================
+  // HELPER FUNGSI — Menentukan class CSS dan ikon
+  // berdasarkan nilai status_request dari data
+  // ======================================================
+
+  // Mengembalikan nama class CSS sesuai status (untuk warna tampilan)
   const statusClass = (status) =>
-    status === "Diterima" ? "diterima" : status === "Ditolak" ? "ditolak" : "pending";
+    status?.toLowerCase() === "diterima" ? "diterima" :
+    status?.toLowerCase() === "ditolak"  ? "ditolak"  : "pending";
 
+  // Mengembalikan nama ikon Font Awesome sesuai status
   const statusIcon = (status) =>
-    status === "Diterima" ? "fa-check-circle" : status === "Ditolak" ? "fa-times-circle" : "fa-clock";
-
+    status?.toLowerCase() === "diterima" ? "fa-check-circle" :
+    status?.toLowerCase() === "ditolak"  ? "fa-times-circle" : "fa-clock";
 
   // ======================================================
-  // === RENDER
+  // TAMPILAN UTAMA — Seluruh halaman dirender di sini
   // ======================================================
-
   return (
     <div className="page-wrapper">
 
-      {/* ── BREADCRUMB ── */}
+      {/* BREADCRUMB — Penanda posisi halaman saat ini */}
       <div className="card shadow-sm mb-3">
         <div className="card-body d-flex justify-content-between align-items-center">
-          <h4 className="mb-0 fw-bold">Request Perbaikan</h4>
+          <h4 className="mb-0 fw-bold">Request Pengadaan</h4>
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb mb-0">
               <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-              <li className="breadcrumb-item active">Request Perbaikan</li>
+              <li className="breadcrumb-item active">Request Pengadaan</li>
             </ol>
           </nav>
         </div>
       </div>
 
-
-      {/* ── SUMMARY CARDS ── */}
+      {/* RINGKASAN STATUS — Kartu yang menampilkan jumlah request per status */}
       <div className="staff-summary-grid">
 
         <div className="staff-summary-card">
@@ -68,7 +77,7 @@ export default function IndexRequestPerbaikanStaff() {
           </div>
           <div>
             <p className="staff-summary-label">Menunggu</p>
-            <p className="staff-summary-value">{totalPending}</p>
+            <p className="staff-summary-value">{totalMenunggu}</p>
           </div>
         </div>
 
@@ -94,8 +103,7 @@ export default function IndexRequestPerbaikanStaff() {
 
       </div>
 
-
-      {/* ── TOMBOL AJUKAN REQUEST ── */}
+      {/* TOMBOL AJUKAN REQUEST — Mengarahkan ke halaman form pengajuan baru */}
       <div className="content-card mb-16">
         <div className="request-action-card">
           <div>
@@ -104,53 +112,56 @@ export default function IndexRequestPerbaikanStaff() {
               Buat Request Baru
             </h6>
             <p className="request-action-subtitle">
-              Ajukan request perbaikan aset kepada admin
+              Ajukan request pengadaan kepada Manajer
             </p>
           </div>
-          <button className="btn-brand" onClick={() => navigate("/request/perbaikan/tambah")}>
+          <button className="btn-brand" onClick={() => navigate("/request/pengadaan/tambah")}>
             <i className="fa fa-plus"></i> Ajukan Request
           </button>
         </div>
       </div>
 
-
-      {/* ── RIWAYAT REQUEST SAYA ── */}
+      {/* DAFTAR REQUEST — Menampilkan semua request milik user yang login */}
       <div className="content-card">
-
         <h6 className="section-title">
           <i className="fa fa-history me-2"></i>
           Riwayat Pengajuan Saya
         </h6>
 
+        {/* Tampilkan spinner saat data masih dimuat dari server */}
         {loading ? (
           <div className="loading-state">
             <i className="fa fa-spinner fa-spin fa-2x"></i>
             <p>Memuat data...</p>
           </div>
+
+        /* Tampilkan pesan kosong jika belum ada request sama sekali */
         ) : myRequests.length === 0 ? (
           <div className="staff-empty-state">
             <i className="fa fa-inbox fa-3x"></i>
             <p>Belum ada request</p>
             <small>Klik "Ajukan Request" di atas untuk membuat pengajuan baru.</small>
           </div>
+
+        /* Tampilkan daftar request jika data tersedia */
         ) : (
           <div className="request-list">
             {myRequests.map((row) => (
-              <div key={row.id} className="request-item">
+              <div key={row.id_request_pengadaan} className="request-item">
 
-                {/* Ikon status */}
-                <div className={`request-item-icon ${statusClass(row.status_request)}`}>
-                  <i className={`fa ${statusIcon(row.status_request)}`}></i>
+                {/* Ikon status request (jam = menunggu, centang = diterima, silang = ditolak) */}
+                <div className={`request-item-icon ${statusClass(row.status_approval)}`}>
+                  <i className={`fa ${statusIcon(row.status_approval)}`}></i>
                 </div>
 
-                {/* Info aset & tanggal */}
+                {/* Info request — nama pengadaan, kategori, dan tanggal pengajuan */}
                 <div className="request-item-info">
                   <p className="request-item-title">
-                    {row.aset?.nama_asetoperasional || "-"}
+                    {row.nama_pengadaan || "-"}
                   </p>
                   <p className="request-item-meta">
-                    <i className="fa fa-map-marker-alt me-1"></i>
-                    {row.aset?.lokasi_asetoperasional || "Lokasi tidak diketahui"}
+                    <i className="fa fa-tag me-1"></i>
+                    {row.kategori_pengadaan || "-"}
                     &nbsp;·&nbsp;
                     <i className="fa fa-calendar me-1"></i>
                     {row.tanggal_request
@@ -159,23 +170,26 @@ export default function IndexRequestPerbaikanStaff() {
                   </p>
                 </div>
 
-                {/* Badge status */}
-                <span className={`status-badge status-${row.status_request}`}>
-                  {row.status_request ?? "Pending"}
+                {/* Badge status — menampilkan teks status approval */}
+                <span className={`status-badge status-${statusClass(row.status_approval)}`}>
+                  {row.status_approval || "Pending"}
                 </span>
 
-                {/* Tombol lihat file + hapus */}
+                {/* Tombol aksi — lihat file dan hapus request */}
                 <div className="request-item-actions">
+
+                  {/* Tombol lihat file hanya muncul jika file tersedia */}
                   {row.file_request_url && (
-                    <a href={row.file_request_url} target="_blank" rel="noopener noreferrer"
-                      className="btn-action btn-edit no-underline">
+                    <a href={row.file_request_url} target="_blank" rel="noopener noreferrer" className="btn-action btn-edit no-underline">
                       <i className="fa fa-file-alt"></i>
                     </a>
                   )}
-                  <button className="btn-action btn-delete"
-                    onClick={() => { setSelectedId(row.id); setShowModal(true); }}>
+
+                  {/* Tombol hapus — menyimpan ID lalu membuka modal konfirmasi */}
+                  <button className="btn-action btn-delete" onClick={() => { setSelectedId(row.id_request_pengadaan); setShowModal(true); }}>
                     <i className="fa fa-trash"></i>
                   </button>
+
                 </div>
 
               </div>
@@ -184,11 +198,12 @@ export default function IndexRequestPerbaikanStaff() {
         )}
       </div>
 
-
-      {/* ── MODAL KONFIRMASI HAPUS ── */}
+      {/* MODAL KONFIRMASI HAPUS — Muncul saat tombol hapus ditekan */}
       {showModal && (
         <>
+          {/* Overlay gelap di belakang modal, klik untuk menutup */}
           <div className="modal-overlay" onClick={() => setShowModal(false)} />
+
           <div className="modal-box">
             <div className="modal-head">
               <span className="modal-title">
@@ -197,14 +212,18 @@ export default function IndexRequestPerbaikanStaff() {
               </span>
               <button className="modal-close" onClick={() => setShowModal(false)}>×</button>
             </div>
+
             <div className="modal-body-content">
               <p>Apakah Anda yakin ingin menghapus request ini?</p>
               <small>Data yang sudah dihapus tidak dapat dikembalikan.</small>
             </div>
+
             <div className="modal-foot">
+              {/* Tombol batal — menutup modal tanpa menghapus */}
               <button className="btn-ghost" onClick={() => setShowModal(false)}>Batal</button>
-              <button className="btn-danger"
-                onClick={() => { handleDelete(selectedId); setShowModal(false); }}>
+
+              {/* Tombol hapus — menjalankan fungsi hapus lalu menutup modal */}
+              <button className="btn-danger" onClick={() => { handleDelete(selectedId); setShowModal(false); }}>
                 <i className="fa fa-trash me-1"></i> Ya, Hapus
               </button>
             </div>
