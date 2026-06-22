@@ -1,12 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useRequestPengadaanList } from "../../hooks/RequestPengadaan/useRequestPengadaanList";
+import { useRequestPerbaikanList } from "../../hooks/RequestPerbaikan/useRequestPerbaikanList";
 import { useRole } from "../../hooks/useRole";
 import { useState } from "react";
 
-export default function IndexRequestPengadaanStaff() {
+export default function IndexRequestPerbaikanStaff() {
 
-  // Ambil daftar data request pengadaan dari hook
-  const { sortedData, loading, handleDelete } = useRequestPengadaanList();
+  // Ambil daftar data request perbaikan dari hook
+  const { sortedData, loading, handleDelete } = useRequestPerbaikanList();
   const navigate = useNavigate(); // Digunakan untuk berpindah halaman
   const { userId } = useRole();   // Ambil ID user yang sedang login
 
@@ -15,7 +15,7 @@ export default function IndexRequestPengadaanStaff() {
   // Membandingkan ID user di data dengan ID user yang sedang aktif
   // ======================================================
   const myRequests = sortedData.filter(
-    (row) => row.user?.id === userId || row.id_user === userId
+    (row) => row.user?.id === userId || row.staff_id === userId || row.user_id === userId
   );
 
   // ======================================================
@@ -28,7 +28,7 @@ export default function IndexRequestPengadaanStaff() {
 
   // ======================================================
   // HITUNG RINGKASAN STATUS — Menghitung jumlah request
-  // berdasarkan status approval yang dimiliki user
+  // berdasarkan status request yang dimiliki user
   // ======================================================
   const totalMenunggu = myRequests.filter(r => r.status_request?.toLowerCase() === "pending").length;
   const totalDiterima = myRequests.filter(r => r.status_request?.toLowerCase() === "diterima").length;
@@ -58,11 +58,11 @@ export default function IndexRequestPengadaanStaff() {
       {/* BREADCRUMB — Penanda posisi halaman saat ini */}
       <div className="card shadow-sm mb-3">
         <div className="card-body d-flex justify-content-between align-items-center">
-          <h4 className="mb-0 fw-bold">Request Pengadaan</h4>
+          <h4 className="mb-0 fw-bold">Request Perbaikan</h4>
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb mb-0">
               <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-              <li className="breadcrumb-item active">Request Pengadaan</li>
+              <li className="breadcrumb-item active">Request Perbaikan</li>
             </ol>
           </nav>
         </div>
@@ -112,10 +112,10 @@ export default function IndexRequestPengadaanStaff() {
               Buat Request Baru
             </h6>
             <p className="request-action-subtitle">
-              Ajukan request pengadaan kepada Manajer
+              Ajukan request perbaikan aset kepada Admin
             </p>
           </div>
-          <button className="btn-brand" onClick={() => navigate("/request/pengadaan/tambah")}>
+          <button className="btn-brand" onClick={() => navigate("/request/perbaikan/tambah")}>
             <i className="fa fa-plus"></i> Ajukan Request
           </button>
         </div>
@@ -147,21 +147,21 @@ export default function IndexRequestPengadaanStaff() {
         ) : (
           <div className="request-list">
             {myRequests.map((row) => (
-              <div key={row.id_request_pengadaan} className="request-item">
+              <div key={row.id_request_perbaikan} className="request-item">
 
                 {/* Ikon status request (jam = menunggu, centang = diterima, silang = ditolak) */}
                 <div className={`request-item-icon ${statusClass(row.status_request)}`}>
                   <i className={`fa ${statusIcon(row.status_request)}`}></i>
                 </div>
 
-                {/* Info request — nama pengadaan, kategori, dan tanggal pengajuan */}
+                {/* Info request — nama aset, lokasi, dan tanggal pengajuan */}
                 <div className="request-item-info">
                   <p className="request-item-title">
-                    {row.nama_pengadaan || "-"}
+                    {row.aset?.nama_asetoperasional || "-"}
                   </p>
                   <p className="request-item-meta">
-                    <i className="fa fa-tag me-1"></i>
-                    {row.kategori_pengadaan || "-"}
+                    <i className="fa fa-map-marker-alt me-1"></i>
+                    {row.aset?.lokasi_asetoperasional || "Lokasi tidak diketahui"}
                     &nbsp;·&nbsp;
                     <i className="fa fa-calendar me-1"></i>
                     {row.tanggal_request
@@ -170,7 +170,7 @@ export default function IndexRequestPengadaanStaff() {
                   </p>
                 </div>
 
-                {/* Badge status — menampilkan teks status approval */}
+                {/* Badge status — menampilkan teks status request */}
                 <span className={`status-badge status-${statusClass(row.status_request)}`}>
                   {row.status_request || "Pending"}
                 </span>
@@ -186,7 +186,7 @@ export default function IndexRequestPengadaanStaff() {
                   )}
 
                   {/* Tombol hapus — menyimpan ID lalu membuka modal konfirmasi */}
-                  <button className="btn-action btn-delete" onClick={() => { setSelectedId(row.id_request_pengadaan); setShowModal(true); }}>
+                  <button className="btn-action btn-delete" onClick={() => { setSelectedId(row.id_request_perbaikan); setShowModal(true); }}>
                     <i className="fa fa-trash"></i>
                   </button>
 
