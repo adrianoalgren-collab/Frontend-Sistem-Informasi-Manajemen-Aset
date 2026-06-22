@@ -178,7 +178,7 @@ function App() {
           <Route path="/request/pemakaian"              element={<IndexRequestPemakaian />} />
           <Route path="/request/pemakaian/tambah"       element={<AddRequestPemakaian />} />
           <Route path="/request/pemakaian/edit/:id"     element={<EditRequestPemakaian />} />
-          <Route path="/request/pemakaian/staff"        element={<IndexRequestPemakaian />} />
+          <Route path="/request/pemakaian/staff"        element={<IndexRequestPemakaianStaff />} />
 
           {/* aset kendaraan — admin ke /asetkendaraan, staff ke /asetkendaraan/staff */}
           <Route path="/asetkendaraan"              element={<IndexAsetKendaraan />} />
