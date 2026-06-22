@@ -173,7 +173,7 @@ export default function AssignDriver() {
             </div>
             <div className="modal-body-content text-center">
               <i className="fa fa-check-circle fa-3x mb-3 icon-brand"></i>
-              <p>Driver berhasil di-assign ke kendaraan.</p>
+              <p>Data report berhasil disimpan.</p>
               <small>Mengalihkan ke halaman data...</small>
             </div>
           </div>
