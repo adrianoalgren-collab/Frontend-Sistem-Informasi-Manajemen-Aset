@@ -31,13 +31,13 @@ export default function IndexRequestPemakaianStaff() {
   // HITUNG RINGKASAN STATUS — Menghitung jumlah request
   // berdasarkan status approval yang dimiliki user
   // ======================================================
-  const totalMenunggu = myRequests.filter(r => r.status_request?.toLowerCase() === "pending").length;
-  const totalDiterima = myRequests.filter(r => r.status_request?.toLowerCase() === "diterima").length;
-  const totalDitolak  = myRequests.filter(r => r.status_request?.toLowerCase() === "ditolak").length;
+  const totalMenunggu = myRequests.filter(r => r.status_approval?.toLowerCase() === "pending").length;
+  const totalDiterima = myRequests.filter(r => r.status_approval?.toLowerCase() === "diterima").length;
+  const totalDitolak  = myRequests.filter(r => r.status_approval?.toLowerCase() === "ditolak").length;
 
   // ======================================================
   // HELPER FUNGSI — Menentukan class CSS dan ikon
-  // berdasarkan nilai status_request dari data
+  // berdasarkan nilai status_approval dari data
   // ======================================================
 
   // Mengembalikan nama class CSS sesuai status (untuk warna tampilan)
@@ -151,8 +151,8 @@ export default function IndexRequestPemakaianStaff() {
               <div key={row.id_request_pemakaian} className="request-item">
 
                 {/* Ikon status request (jam = menunggu, centang = diterima, silang = ditolak) */}
-                <div className={`request-item-icon ${statusClass(row.status_request)}`}>
-                  <i className={`fa ${statusIcon(row.status_request)}`}></i>
+                <div className={`request-item-icon ${statusClass(row.status_approval)}`}>
+                  <i className={`fa ${statusIcon(row.status_approval)}`}></i>
                 </div>
 
                 {/* Info request — nama barang, jumlah, dan tanggal pengajuan */}
@@ -172,8 +172,8 @@ export default function IndexRequestPemakaianStaff() {
                 </div>
 
                 {/* Badge status — menampilkan teks status approval */}
-                <span className={`status-badge status-${statusClass(row.status_request)}`}>
-                  {row.status_request || "Pending"}
+                <span className={`status-badge status-${statusClass(row.status_approval)}`}>
+                  {row.status_approval || "Pending"}
                 </span>
 
                 {/* Tombol aksi — lihat file dan hapus request */}
