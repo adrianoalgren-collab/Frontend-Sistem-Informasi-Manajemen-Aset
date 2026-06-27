@@ -28,10 +28,10 @@ export default function CompHeader() {
 
   // ── ROUTING BERBASIS ROLE ──────────────────────────
   // Sebelumnya pakai role === "admin" (string) — sekarang pakai idRole yang lebih reliable
-  const requestPerbaikanTo = isAdmin ? "/request/perbaikan" : "/request/perbaikan/staff";
-  const reportTo           = isAdmin ? "/report"            : "/report/staff";
-  const requestPengadaanTo = isAdmin ? "/request/pengadaan" : "/request/pengadaan/staff";
-  const requestPemakaianTo = isAdmin ? "/request/pemakaian" : "/request/pemakaian/staff";
+  const requestPerbaikanTo = (isAdmin || isManager) ? "/request/perbaikan" : "/request/perbaikan/staff";
+  const reportTo           = (isAdmin || isManager) ? "/report"            : "/report/staff";
+  const requestPengadaanTo = (isAdmin || isManager) ? "/request/pengadaan" : "/request/pengadaan/staff";
+  const requestPemakaianTo = (isAdmin || isManager) ? "/request/pemakaian" : "/request/pemakaian/staff";
 
   const isRequestActive = location.pathname.startsWith("/request") || location.pathname.startsWith("/requestPengadaan");
   const isRequestOpen   = openRequest || isRequestActive;
